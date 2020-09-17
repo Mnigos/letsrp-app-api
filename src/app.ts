@@ -1,13 +1,11 @@
 const express = require('express');
+const path = require('path');
+const routes = require('./routes/index');
 
-const app = express();
+const main = express();
 
-app.get('/', function (req, res, next) {
-  res.json({
-    status: 'Sukces!'
-  });
-});
+main.set('views', path.join(__dirname, 'views'));
 
-app.listen(8080, function () {
-  console.log('Listening at port 8080!');
-});
+main.use('/', routes);
+
+module.exports = main;

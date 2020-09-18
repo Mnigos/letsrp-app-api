@@ -1,10 +1,10 @@
 import express, { Application } from 'express';
 
-const routes = require('./routes/index');
+import routes from './routes/index';
 
 const app: Application = express();
 
 app.use('/', routes);
 app.use('/applications', routes);
 
-module.exports = app;
+export default app;

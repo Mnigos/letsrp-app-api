@@ -1,7 +1,7 @@
-const app = require('./app');
+import app from './app';
 
-app.set('port', process.env.PORT || 8080);
+const port = 8080;
 
-const server = app.listen(app.get('port'), () => {
-  console.log(`Listening on ${server.address().port}`);
+const server = app.listen(port, () => {
+  console.log(`Listening on ${port}`);
 });

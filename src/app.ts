@@ -4,8 +4,6 @@ const routes = require('./routes/index');
 
 const main = express();
 
-main.set('views', path.join(__dirname, 'views'));
-
 main.use('/', routes);
 
 module.exports = main;

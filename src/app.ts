@@ -1,6 +1,7 @@
-import express from 'express';
-import { Application } from 'express';
+import express, { Application } from 'express';
+
 import path from 'path';
+
 const routes = require('./routes/index');
 
 const app: Application = express();

@@ -30,5 +30,13 @@
         "no-unused-vars": "warn",
         "no-console": "off",
         "func-names": "off"
-    }
+    },
+    "overrides": [
+        {
+        "files": ["dist/*"],
+            "rules": {
+                "require-jsdoc": "off"
+            }
+        }
+    ]
 }

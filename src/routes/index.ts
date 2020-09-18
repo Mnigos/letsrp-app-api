@@ -1,8 +1,10 @@
 const router = require('express').Router();
 
-router.get('/', function (req, res) {
-  res.json({
-    status: 'OK!'
+router.get('/', function (req: Request, res: Response) {
+  res.status(200)
+  .send({
+    message: 'Success',
+    status: res.status,
   });
 });
 

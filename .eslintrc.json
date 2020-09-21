@@ -29,7 +29,15 @@
         "prefer-const": "warn",
         "no-unused-vars": "warn",
         "no-console": "off",
-        "func-names": "off"
+        "func-names": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+              "ts": "never",
+              "tsx": "never"
+            }
+        ]
     },
     "overrides": [
         {

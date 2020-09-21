@@ -9,4 +9,12 @@ router.get('/applications', function (req: Request, res: Response) {
   });
 });
 
+router.post('/applications', function (req: Request, res: Response) {
+  const application = {
+    name: req.body.name
+  };
+
+  res.send(application);
+});
+
 export default router;

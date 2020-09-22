@@ -4,10 +4,18 @@ Host: localhost:8080
 GET /applications HTTP/1.1
 Host: localhost:8080
 ###
-POST /applications HTTP/1.1
+POST /applications/wl HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
 
 {
-  "name": "e"
+  "name": "e",
+  "date": "e",
+  "idea": "e",
+  "story": "e",
+  "action": "e",
+  "know": "wad",
+  "experience": "wdawd",
+  "dc": "waidj",
+  "hex": "e"
 }

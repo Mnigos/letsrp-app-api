@@ -48,7 +48,7 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     expectedType: string = 'string'
   ) => keys.every((key) => typeof obj[key] === expectedType);
 
-  const validation = requireObjectKeysType(
+  const validationString = requireObjectKeysType(
     req.body,
     [
       'name',
@@ -63,7 +63,8 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     ],
     'string'
   )
-  if(!validation) {
+  const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
+  if(!validationString || !validationNumber) {
     res.status(406)
     .send({
       message: 'Validation failed',

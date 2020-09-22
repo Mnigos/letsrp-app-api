@@ -48,23 +48,34 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     expectedType: string = 'string'
   ) => keys.every((key) => typeof obj[key] === expectedType);
 
-  res.send(
-    requireObjectKeysType(
-      req.body,
-      [
-        'name',
-        'date',
-        'idea',
-        'story',
-        'action',
-        'know',
-        'experience',
-        'dc',
-        'hex'
-      ],
-      'string'
-    )
-  );
+  const validation = requireObjectKeysType(
+    req.body,
+    [
+      'name',
+      'date',
+      'idea',
+      'story',
+      'action',
+      'know',
+      'experience',
+      'dc',
+      'hex'
+    ],
+    'string'
+  )
+  if(!validation) {
+    res.status(406)
+    .send({
+      message: 'Validation failed',
+      status: res.status
+    });
+  } else {
+    res.status(202)
+    .send({
+      message: 'Accepted',
+      status: res.status
+    });
+  }
 });
 
 export default router;

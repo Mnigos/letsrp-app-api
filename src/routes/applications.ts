@@ -62,17 +62,16 @@ router.post('/applications/wl', function (req: Request, res: Response) {
       'hex'
     ],
     'string'
-  )
+  );
   const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
-  if(!validationString || !validationNumber) {
-    res.status(406)
-    .send({
+
+  if (!validationString || !validationNumber) {
+    res.status(406).send({
       message: 'Validation failed',
       status: res.status
     });
   } else {
-    res.status(202)
-    .send({
+    res.status(202).send({
       message: 'Accepted',
       status: res.status
     });

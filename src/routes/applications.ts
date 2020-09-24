@@ -44,18 +44,18 @@ router.post('/applications/wl', function (req: Request, res: Response) {
 
 	const validation = checkTypes(req.body);
 
-	if (validation!="") {
-		let element = validation;
+	if (validation.length>0) {
+		let errors: any[] = [];
+		validation.forEach(el => {
+			errors.push({err:`Validation failed (${el})`,cssSelector:`#${el}_q`})
+		});
+
 		res.status(406).send({
-			message: {error:true,errortxt:`Validation failed (${element})`,cssSelector:`#${element}_q`},
+			message: {error:true,errors:errors},
 			status: res.status
 		});
 	} else {
-		let checkResult= {
-			error:false,
-			errortxt:"",
-			cssSelector:""
-		}
+		let checkResult;
 		checkResult = CheckApplication(application);
 		if(!checkResult.error){
 			res.status(406).send({
@@ -72,38 +72,42 @@ router.post('/applications/wl', function (req: Request, res: Response) {
 });
 
 function CheckApplication(application: { name: any; date: any; idea: any; story: any; action?: string; old: any; know: any; experience: any; dc: any; hex: any; }){
+	let err = [];
+
 	const minimum1 = 40;
 	const minimum2 = 100;
 	const minimum3 = 200;
 
-	if(application.old>150)return {error:true,errortxt:"Validation failed - Wrong old",cssSelector:"#old_q"}
+	if(application.old>150)err.push({err:"Validation failed - Wrong old",cssSelector:"#old_q"})
 
-	if(application.know.length<minimum1)return {error:true,errortxt:`Validation failed - Too Short Know (${application.know.length}<${minimum1})`,cssSelector:"#know_q"}
-	if(application.experience.length<minimum1)return {error:true,errortxt:`Validation failed - Too Short Experience (${application.experience.length}>${minimum1})`,cssSelector:"#experience_q"}
-	if(application.story.length<minimum2)return {error:true,errortxt:`Validation failed - Too Short Story (${application.story.length}<${minimum2})`,cssSelector:"#story_q"}
-	if(application.idea.length<minimum2)return {error:true,errortxt:`Validation failed - Too Short Idea (${application.idea.length}<${minimum2})`,cssSelector:"#idea_q"}
-	if(application.action.length<minimum3)return {error:true,errortxt:`Validation failed - Too Short Action (${application.action.length}<${minimum3})`,cssSelector:"#action_q"}
+	if(application.know.length<minimum1)err.push({err:`Validation failed - Too Short Know (${application.know.length}<${minimum1})`,cssSelector:"#know_q"})
+	if(application.experience.length<minimum1)err.push ({err:`Validation failed - Too Short Experience (${application.experience.length}<${minimum1})`,cssSelector:"#experience_q"})
+	if(application.story.length<minimum2)err.push ({err:`Validation failed - Too Short Story (${application.story.length}<${minimum2})`,cssSelector:"#story_q"})
+	if(application.idea.length<minimum2)err.push ({err:`Validation failed - Too Short Idea (${application.idea.length}<${minimum2})`,cssSelector:"#idea_q"})
+	if(application.action.length<minimum3)err.push ({err:`Validation failed - Too Short Action (${application.action.length}<${minimum3})`,cssSelector:"#action_q"})
 
-	if(!application.date.match(/^([0-2][0-9]|[0-9]|3[0-1])-(([0][0-9])|[0-9]|1[0-2])-[0-9]{4}/)) return {error:true,errortxt:`Validation failed - Invalid date (dd-mm-rrrr)`,cssSelector:"#date_q"}
-	if(!application.dc.match(/.{1,}#[0-9]{4}|[0-9]{18}/))return {error:true,errortxt:`Validation failed - Discord tag invalid. \nRemember to provide full tag with numbers after # OR your user ID (18 numbers)`,cssSelector:"#dc_q"}
+	if(!application.date.match(/^([0-2][0-9]|[0-9]|3[0-1])-(([0][0-9])|[0-9]|1[0-2])-[0-9]{4}$/)) err.push ({err:`Validation failed - Invalid date (dd-mm-rrrr)`,cssSelector:"#date_q"})
+	if(!application.dc.match(/.{1,}#[0-9]{4}|[0-9]{18}$/))err.push ({err:`Validation failed - Discord tag invalid. \nRemember to provide full tag with numbers after # OR your user ID (18 numbers)`,cssSelector:"#dc_q"})
 
-	if(application.name.length<1)return {error:true,errortxt:`Validation failed - Name is empty`,cssSelector:"#name_q"}
-	if(application.hex.length<1)return {error:true,errortxt:`Validation failed - Hex is empty`,cssSelector:"#name_q"}
+	if(application.name.length<1)err.push ({err:`Validation failed - Name is empty`,cssSelector:"#name_q"})
+	if(application.hex.length<1)err.push ({err:`Validation failed - Hex is empty`,cssSelector:"#hex_q"})
 
-	return {error:false,errortxt:null,cssSelector:null}
+	if(err.length>0)
+	return {error:true,errors:err};
+	return {error:false}
 }
 
 function checkTypes(body: string){
+	let errors: string[] = [];
 	function requireObjectKeysType (
 		obj: any,
 		keys: string[],
 		expectedType: string = 'string'
 	) {
-		let err = "";
+		let err: string[] = [];
 		keys.every((key) => {
 			if(typeof obj[key] !== expectedType){
-				err = key;
-				return;
+				err.push(key);
 			}
 		});
 		return err;
@@ -115,8 +119,8 @@ function checkTypes(body: string){
 
 	const validationNumber = requireObjectKeysType(body, ['old'], 'number');
 
-	if(validationString!="")return validationString;
-	if(validationNumber!="")return validationNumber;
-	return "";
+	errors = validationString;
+	if(validationNumber.length>0)errors.push(validationNumber[0]);
+	return errors;
 }
 export default router;

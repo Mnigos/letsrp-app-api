@@ -21,9 +21,13 @@ function Submit(){
 	})
 	
 	if(res.error){
-		alert(res.errortxt)
-		if(res.cssSelector)
-		document.querySelector(res.cssSelector).style['background-color'] = 'red';
+		errortxt = "";
+		res.errors.forEach(el => {
+			errortxt += el.err+'\n'
+			if(el.cssSelector)
+			document.querySelector(el.cssSelector).style['background-color'] = 'red';
+		});
+		alert(errortxt)
 	}else{
 		alert(res.txt)
 	}

@@ -45,8 +45,8 @@ router.post('/applications/wl', function (req: Request, res: Response) {
   const objectValidation = (
     obj: any,
     keys: string[],
-    expectedType: string,
-    ) => keys.every(key => obj[key].length === expectedType);
+    expectedType: string[],
+    ) => keys.every(key => obj[key].length === expectedType[]);
 
   const requireObjectKeysType = (
     obj: any,

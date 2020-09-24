@@ -4,6 +4,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "esModuleInterop": true,
+    "preserveConstEnums": true,
     "outDir": "dist"
   },
   "include": ["src/**/*"],

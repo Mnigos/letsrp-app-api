@@ -4,11 +4,12 @@ import fs from 'fs';
 const router = Router();
 
 router.get('/', function (req: Request, res: Response) {
-  res.sendfile('./src/form.html')
+  res.sendfile('./web/form.html')
 });
 
 router.get('/form.js', function (req: Request, res: Response) {
-  res.sendfile('./src/form.js')
+	res.sendfile('./web/form.js')
 });
+
 
 export default router;

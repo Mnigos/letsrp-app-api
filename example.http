@@ -10,6 +10,11 @@ Host: localhost:8080
 POST /applications/wl HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
+###
+GET /applications/wl/raw HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+Authorization: 12345678
 
 {
   "name": "e",

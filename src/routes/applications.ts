@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 
-const router = require('express').Router();
+const router = Router();
 
 declare global {
   namespace Express {

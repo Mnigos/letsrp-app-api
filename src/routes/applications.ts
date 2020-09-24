@@ -42,11 +42,17 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     hex: req.body.hex as string
   };
 
+  const objectValidation = (
+    obj: any,
+    keys: string[],
+    expectedType: string,
+    ) => keys.every(key => obj[key].length === expectedType);
+
   const requireObjectKeysType = (
     obj: any,
     keys: string[],
-    expectedType: string = 'string'
-  ) => keys.every((key) => typeof obj[key] === expectedType);
+    expectedType: string = 'string',
+  ) => keys.every(key => typeof obj[key] === expectedType);
 
   const validationString = requireObjectKeysType(
     req.body,

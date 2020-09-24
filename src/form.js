@@ -26,6 +26,7 @@ function Submit(){
 			errortxt += el.err+'\n'
 			if(el.cssSelector)
 			document.querySelector(el.cssSelector).style['background-color'] = 'red';
+			document.querySelector(el.cssSelector).onclick = function(){ document.querySelector(el.cssSelector).style['background-color'] = ''}
 		});
 		alert(errortxt)
 	}else{

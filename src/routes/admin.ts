@@ -31,6 +31,35 @@ export function checkAuth(req: Request) {
 
   return status;
 }
+let lastconnections:any = {}
+let lockconnections:any = {}
+export function fromLastConnection(ip:string){
+  let now = + new Date();
+  if(lastconnections[ip]){
+    let lasttime = lastconnections[ip]
+    lastconnections[ip] = now;
+    return lasttime-now;
+  }
+  lastconnections[ip] = now;
+  return -1;
+}
+export function checkTimeLock(req:Request){
+  let now = + new Date();
+  if(checkAuth(req))return false;
+  if(lockconnections[req.ip]&&lockconnections[req.ip].time){
+    if(now-lockconnections[req.ip].time<lockconnections[req.ip].lock){
+      let ms = lockconnections[req.ip].lock-(now-lockconnections[req.ip].time)
+      return {ms:ms,s:Math.round(ms/1000),lco:lockconnections[req.ip]};
+    }
+  }
+  return false;
+}
+export function setTimeLock(req:Request,lock:number,msg:string = ""){
+  let now = + new Date();
+  lockconnections[req.ip] = {time:now,lock:lock,msg:msg};
+  return true;
+}
+
 
 router.get('/admin', function(req: Request, res: Response) {
   if (checkAuth(req)) {

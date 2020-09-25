@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import fs, { fstat } from 'fs';
 
-import { checkAuth } from './admin';
+import { checkAuth, fromLastConnection, checkTimeLock, setTimeLock } from './admin';
 require('./admin')
 
 const router = Router();
@@ -26,7 +26,49 @@ router.get('/applications/wl/raw', function(req: Request, res: Response) {
     });
   }
 });
+router.post('/applications/wl/delete', function(req: Request, res: Response) {
+  if (checkAuth(req)) {
+    let body = req.body;
+    deleteApplications(body.index);
+    res.status(200).send("Success");
+  } else {
+    res.status(403).send({
+      message: { error: false, content: 'Not Authorized' },
+      status: res.status
+    });
+  }
+})
+router.post('/applications/wl/delete/bulk', function(req: Request, res: Response) {
+  if (checkAuth(req)) {
+    let body = req.body;
+    deleteApplicationsBulk(body.elements);
+
+    res.status(200).send("Success");
+  } else {
+    res.status(403).send({
+      message: { error: false, content: 'Not Authorized' },
+      status: res.status
+    });
+  }
+})
 router.post('/applications/wl', function(req: Request, res: Response) {
+  let cTL = checkTimeLock(req)
+  if(cTL){
+    const errors: any[] = [];
+    let cTLmsg = cTL.lco.msg;
+    if(cTLmsg.length>0){
+      cTLmsg = "-- "+cTLmsg;
+    }
+    errors.push({
+      err: `Validation failed (Wait At Least ${cTL.s}s ${cTLmsg})`,
+    });
+    res.status(406).send({
+      message: { error: true, errors },
+      status: res.status
+    });
+    return;
+  }
+  setTimeLock(req,10*1000);
   const application = {
     name: req.body.name as string,
     date: req.body.date as string,
@@ -59,10 +101,11 @@ router.post('/applications/wl', function(req: Request, res: Response) {
     let checkResult;
     checkResult = CheckApplication(application);
     if (!checkResult.error) {
-      res.status(406).send({
+      res.status(200).send({
         message: { error: false, txt: `Application Accepted!` },
         status: res.status
       });
+      setTimeLock(req,20*60*1000,"You have recently sent application");
       addApplication(req.body);
     } else {
       res.status(400).send({
@@ -203,17 +246,39 @@ function addApplication(body: any) {
 }
 
 function getApplications() {
+  applications.forEach((el:any,index)=>{
+    if(!el.status) {
+      let body: any = {}
+      body = applications[index];
+      body.status = 'toapprove'
+      applications[index] = body;
+    }
+  })
+  saveApplications();
   return applications;
 }
 router.post('/applications/wl/setStatus', function(req: Request, res: Response) {
   if(checkAuth(req)){
     let data = req.body;
     setStatus(data.index,data.status)
-    res.status(200).send("Succes");
+    res.status(200).send("Success");
   }else {
     res.status(403).send("Not Authorised");
   }
 
+})
+router.post('/applications/wl/setStatus/bulk', function(req: Request, res: Response) {
+  if (checkAuth(req)) {
+    let body = req.body;
+    setStatusBulk(body.elements,body.status);
+
+    res.status(200).send("Success");
+  } else {
+    res.status(403).send({
+      message: { error: false, content: 'Not Authorized' },
+      status: res.status
+    });
+  }
 })
 function setStatus(index: number, status: any){
   let body: any = {}
@@ -222,9 +287,40 @@ function setStatus(index: number, status: any){
   applications[index] = body;
   saveApplications()
 }
+function setStatusBulk(elements:[], status: any){
+  elements.forEach(index=>{
+    let body: any = {}
+    body = applications[index];
+    body.status = status
+    applications[index] = body;
+  })
+
+  saveApplications()
+}
 
 function saveApplications(){
   fs.writeFileSync('./applications.json', JSON.stringify(applications));
 }
+function deleteApplications(index:number){
+  if (index > -1) {
+    applications.splice(index, 1);
+  }
+  saveApplications();
+}
+function deleteApplicationsBulk(elements:[]){
+  let els:any = [];
+  elements.forEach(el=>{
+    els.push(applications[el])
+  })
+  els.forEach((el:any)=>{
+    let index = applications.indexOf(el)
+    if (index > -1) {
+      applications.splice(index, 1);
+    }
+  })
+
+  saveApplications();
+}
+
 
 export default router;

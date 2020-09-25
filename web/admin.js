@@ -44,7 +44,11 @@ function getApplications() {
       } else {
         statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
       }
-      obj.innerHTML = `NAME: <b>${encodeURI(el.name)}</b>&nbsp;&nbsp; DC: ${encodeURI(el.dc)} -&nbsp;&nbsp;- &nbsp;OLD: ${encodeURI(el.old)} &nbsp;&nbsp; DATE: ${encodeURI(el.date)} <button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>` + statusButtons;
+      statusButtons += `<button onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
+
+      checkbox = `<input type="checkbox" id='app_${i}_checkbox' class="sel_checkbox" onclick="countChecks()">`;
+
+      obj.innerHTML = `&nbsp;&nbsp;&nbsp;${checkbox}  INDEX: ${i} &nbsp;&nbsp;&nbsp; NAME: <b>${encodeURI(el.name)}</b>&nbsp;&nbsp; DC: ${encodeURI(el.dc)} -&nbsp;&nbsp;- &nbsp;OLD: ${encodeURI(el.old)} &nbsp;&nbsp; DATE: ${encodeURI(el.date)} <button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>` + statusButtons;
       applications_obj.appendChild(obj);
     });
   }
@@ -54,10 +58,13 @@ function getApplications() {
   document.querySelector(`#toapp_B`).disabled = false;
   document.querySelector(`#rej_B`).disabled = false;
   document.querySelector(`#app_B`).disabled = false;
-  if(counts[0]<1)showSection(0,true);
-  if(counts[1]<1)showSection(1,true);
-  if(counts[2]<1)showSection(2,true);
-
+  if (counts[0] < 1) showSection(0, true);
+  if (counts[1] < 1) showSection(1, true);
+  if (counts[2] < 1) showSection(2, true);
+  document.querySelector('#app_toapprove_checkbox').checked = false;
+  document.querySelector('#app_rejected_checkbox').checked = false;
+  document.querySelector('#app_approved_checkbox').checked = false;
+  countChecks();
 }
 
 function showMore(index) {
@@ -81,6 +88,7 @@ function showMore(index) {
   } else {
     statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
   }
+  statusButtons += `<button onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
   info_obj = document.createElement('div');
   info_obj.style.color = 'black';
   info_obj.id = 'info';
@@ -121,16 +129,47 @@ function setStatus(index, status) {
   req.open('POST', `/applications/wl/setStatus?auth=${auth}`, false);
   req.setRequestHeader('Content-type', 'application/json');
   req.send(JSON.stringify({ index: index, status: status }));
-  if (req.responseText === 'Succes') {
-    alert(`Status changed succesfully to ${status}`);
+  if (req.responseText === 'Success') {
+    alert(`Status changed successfully to ${status}`);
   } else {
     alert(`Error while changing status to ${status}`);
   }
   getApplications();
 }
 
+function setStatusBulk(elements, status) {
+  var req = new XMLHttpRequest();
+  req.open('POST', `/applications/wl/setStatus/bulk?auth=${auth}`, false);
+  req.setRequestHeader('Content-type', 'application/json');
+  req.send(JSON.stringify({ elements: elements, status: status }));
+  if (req.responseText === 'Success') {
+    alert(`(BULK ${elements.length}) Status changed successfully to ${status}`);
+  } else {
+    alert(`(BULK ${elements.length}) Error while changing status to ${status}`);
+  }
+  getApplications();
+}
+
+function deleteBulk(elements) {
+  if (confirm(`Are you sure you want to delete ALL of ${JSON.stringify(elements)} application?`)) {
+    if (confirm(`Are you REALLY sure you want to delete ALL of ${JSON.stringify(elements)} application?`)) {
+      var req = new XMLHttpRequest();
+      req.open('POST', `/applications/wl/delete/bulk?auth=${auth}`, false);
+      req.setRequestHeader('Content-type', 'application/json');
+      req.send(JSON.stringify({ elements: elements }));
+      if (req.responseText === 'Success') {
+        alert(`(BULK ${elements.length}) Applications deleted`);
+      } else {
+        alert(`(BULK ${elements.length}) Error deleting applications`);
+      }
+      getApplications();
+    }
+  }
+
+}
+
 function showSection(id, hide) {
-  function showSectionWithName(tag1,tag2){
+  function showSectionWithName(tag1, tag2) {
     document.querySelector(tag1).style.display = 'none';
     document.querySelector(tag2).innerHTML = 'Show';
     document.querySelector(tag2).onclick = function() {
@@ -147,15 +186,145 @@ function showSection(id, hide) {
       showSection(id, true);
     };
   }
+
   if (id == 0) {
-   showSectionWithName('#app_toapprove','#toapp_B')
+    showSectionWithName('#app_toapprove', '#toapp_B');
   }
   if (id == 1) {
-    showSectionWithName('#app_rejected','#rej_B')
+    showSectionWithName('#app_rejected', '#rej_B');
   }
   if (id == 2) {
-    showSectionWithName('#app_approved','#app_B')
+    showSectionWithName('#app_approved', '#app_B');
   }
+}
+
+function deleteApplication(index) {
+  if (confirm(`Are you sure you want to delete #${index} application?`)) {
+    var req = new XMLHttpRequest();
+    req.open('POST', `/applications/wl/delete?auth=${auth}`, false);
+    req.setRequestHeader('Content-type', 'application/json');
+    req.send(JSON.stringify({ index: index }));
+    if (req.responseText === 'Success') {
+      alert(`Application deleted`);
+    } else {
+      alert(`Error while deleting application`);
+    }
+    getApplications();
+  } else {
+
+  }
+
+}
+
+selectedIndexes = [];
+
+function countChecks() {
+  selectedIndexes = [];
+  sel_actions = document.querySelector('#selection_actions');
+  checkboxes = document.querySelectorAll('.sel_checkbox');
+
+  checkboxes.forEach(el => {
+    if (el.checked === true) {
+      index = el.id.replace('_checkbox', '').replace('app_', '');
+      selectedIndexes.push(index);
+    }
+  });
+
+  section0_boxes = [];
+  section1_boxes = [];
+  section2_boxes = [];
+  checkboxes.forEach(el => {
+    index = el.id.replace('_checkbox', '').replace('app_', '');
+    if (content[index].status === 'toapprove') section0_boxes.push(el);
+  });
+  checkboxes.forEach(el => {
+    index = el.id.replace('_checkbox', '').replace('app_', '');
+    if (content[index].status === 'rejected') section1_boxes.push(el);
+  });
+  checkboxes.forEach(el => {
+    index = el.id.replace('_checkbox', '').replace('app_', '');
+    if (content[index].status === 'approved') section2_boxes.push(el);
+  });
+
+  section_boxes = [[false, false], [false, false], [false, false]];
+  section0_boxes.forEach(el => {
+    if (el.checked) section_boxes[0][0] = true;
+    if (!el.checked) section_boxes[0][1] = true;
+  });
+  section1_boxes.forEach(el => {
+    if (el.checked) section_boxes[1][0] = true;
+    if (!el.checked) section_boxes[1][1] = true;
+  });
+  section2_boxes.forEach(el => {
+    if (el.checked) section_boxes[2][0] = true;
+    if (!el.checked) section_boxes[2][1] = true;
+  });
+
+  document.querySelector('#app_toapprove_checkbox').indeterminate = false;
+  if (section_boxes[0][0] && section_boxes[0][1]) document.querySelector('#app_toapprove_checkbox').indeterminate = true;
+  if (section_boxes[0][0] && !section_boxes[0][1]) document.querySelector('#app_toapprove_checkbox').checked = true;
+  if (!section_boxes[0][0] && !section_boxes[0][1]) document.querySelector('#app_toapprove_checkbox').checked = false;
+  if (!section_boxes[0][0] && section_boxes[0][1]) document.querySelector('#app_toapprove_checkbox').checked = false;
+
+  document.querySelector('#app_rejected_checkbox').indeterminate = false;
+  if (section_boxes[1][0] && section_boxes[1][1]) document.querySelector('#app_rejected_checkbox').indeterminate = true;
+  if (section_boxes[1][0] && !section_boxes[1][1]) document.querySelector('#app_rejected_checkbox').checked = true;
+  if (!section_boxes[1][0] && !section_boxes[1][1]) document.querySelector('#app_rejected_checkbox').checked = false;
+  if (!section_boxes[1][0] && section_boxes[1][1]) document.querySelector('#app_rejected_checkbox').checked = false;
+
+  document.querySelector('#app_approved_checkbox').indeterminate = false;
+  if (section_boxes[2][0] && section_boxes[2][1]) document.querySelector('#app_approved_checkbox').indeterminate = true;
+  if (section_boxes[2][0] && !section_boxes[2][1]) document.querySelector('#app_approved_checkbox').checked = true;
+  if (!section_boxes[2][0] && !section_boxes[2][1]) document.querySelector('#app_approved_checkbox').checked = false;
+  if (!section_boxes[2][0] && section_boxes[2][1]) document.querySelector('#app_approved_checkbox').checked = false;
+
+  document.getElementById('selection_count').innerHTML = selectedIndexes.length;
+
+  if(selectedIndexes.length>0){
+    document.querySelectorAll('.sel_action').forEach(el=>{
+      el.disabled = false;
+    })
+  }else {
+    document.querySelectorAll('.sel_action').forEach(el=>{
+      el.disabled = true;
+    })
+  }
+}
+
+function deleteSelection() {
+  deleteBulk(selectedIndexes);
+}
+
+function setStatusSelection(status) {
+  setStatusBulk(selectedIndexes,status);
+}
+
+function selectSection(section) {
+  state = false;
+  tag = '';
+  if (section === 0) tag = '#app_toapprove_checkbox';
+  if (section === 1) tag = '#app_rejected_checkbox';
+  if (section === 2) tag = '#app_approved_checkbox';
+  state = false;
+  if(section>=0)
+  state = document.querySelector(tag).checked;
+  checkboxes = document.querySelectorAll('.sel_checkbox');
+
+  checkboxes.forEach(el => {
+    if(section<0)el.checked = false;
+    index = el.id.replace('_checkbox', '').replace('app_', '');
+    if (section === 0 && content[index].status === 'toapprove') el.checked = state;
+    if (section === 1 && content[index].status === 'rejected') el.checked = state;
+    if (section === 2 && content[index].status === 'approved') el.checked = state;
+  });
+  countChecks();
+}
+
+function deselectAll(){
+  selectSection(-1)
+  document.querySelector('#app_toapprove_checkbox').checked = false;
+  document.querySelector('#app_rejected_checkbox').checked = false;
+  document.querySelector('#app_approved_checkbox').checked = false;
 }
 
 getApplications();
@@ -163,5 +332,7 @@ showSection(0, false);
 showSection(1, true);
 showSection(2, true);
 
-
+document.querySelector('#app_toapprove_checkbox').checked = false;
+document.querySelector('#app_rejected_checkbox').checked = false;
+document.querySelector('#app_approved_checkbox').checked = false;
 

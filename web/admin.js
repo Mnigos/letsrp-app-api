@@ -1,5 +1,5 @@
 auth = '';
-counts = [0,0,0];
+counts = [0, 0, 0];
 
 if (location.href.split('?').length > 1) {
   let args = location.href.split('?')[1].split('=');
@@ -13,34 +13,51 @@ if (location.href.split('?').length > 1) {
     });
   }
 }
-url = `/applications/wl/raw?auth=${auth}`;
 
-var req = new XMLHttpRequest();
-req.open('GET', url, false);
-req.send(null);
-data = JSON.parse(req.responseText);
 
-if (!data.message.error) {
-  content = data.message.content;
-  content.forEach((el, i) => {
-    app_status = el.status;
-    applications_obj = document.querySelector(`#app_${app_status}`);
-    obj = document.createElement('div');
-    obj.id = `app_${i}`;
-    obj.class = 'app_';
-    statusButtons = ``;
-    if(app_status==='toapprove')counts[0] = counts[0]+1;
-    if(app_status==='approved')counts[1] = counts[1]+1;
-    if(app_status==='rejected')counts[2] = counts[2]+1;
-    if (app_status === 'toapprove') {
-      statusButtons = `<button onclick="setStatus(${i},'approved')">APPROVE</button>`;
-      statusButtons += `<button onclick="setStatus(${i},'rejected')">REJECT</button>`;
-    }else {
-      statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
-    }
-    obj.innerHTML = `NAME: <b>${encodeURI(el.name)}</b>&nbsp;&nbsp; DC: ${encodeURI(el.dc)} -&nbsp;&nbsp;- &nbsp;OLD: ${encodeURI(el.old)} &nbsp;&nbsp; DATE: ${encodeURI(el.date)} <button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>` + statusButtons;
-    applications_obj.appendChild(obj);
-  });
+function getApplications() {
+  document.querySelector(`#app_toapprove`).innerHTML = '';
+  document.querySelector(`#app_rejected`).innerHTML = '';
+  document.querySelector(`#app_approved`).innerHTML = '';
+  url = `/applications/wl/raw?auth=${auth}`;
+  counts = [0, 0, 0];
+  var req = new XMLHttpRequest();
+  req.open('GET', url, false);
+  req.send(null);
+  data = JSON.parse(req.responseText);
+
+  if (!data.message.error) {
+    content = data.message.content;
+    content.forEach((el, i) => {
+      app_status = el.status;
+      applications_obj = document.querySelector(`#app_${app_status}`);
+      obj = document.createElement('div');
+      obj.id = `app_${i}`;
+      obj.class = 'app_';
+      statusButtons = ``;
+      if (app_status === 'toapprove') counts[0] = counts[0] + 1;
+      if (app_status === 'rejected') counts[1] = counts[1] + 1;
+      if (app_status === 'approved') counts[2] = counts[2] + 1;
+      if (app_status === 'toapprove') {
+        statusButtons = `<button onclick="setStatus(${i},'approved')">APPROVE</button>`;
+        statusButtons += `<button onclick="setStatus(${i},'rejected')">REJECT</button>`;
+      } else {
+        statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
+      }
+      obj.innerHTML = `NAME: <b>${encodeURI(el.name)}</b>&nbsp;&nbsp; DC: ${encodeURI(el.dc)} -&nbsp;&nbsp;- &nbsp;OLD: ${encodeURI(el.old)} &nbsp;&nbsp; DATE: ${encodeURI(el.date)} <button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>` + statusButtons;
+      applications_obj.appendChild(obj);
+    });
+  }
+  document.querySelector(`#app_toapprove_count`).innerHTML = counts[0];
+  document.querySelector(`#app_rejected_count`).innerHTML = counts[1];
+  document.querySelector(`#app_approved_count`).innerHTML = counts[2];
+  document.querySelector(`#toapp_B`).disabled = false;
+  document.querySelector(`#rej_B`).disabled = false;
+  document.querySelector(`#app_B`).disabled = false;
+  if(counts[0]<1)showSection(0,true);
+  if(counts[1]<1)showSection(1,true);
+  if(counts[2]<1)showSection(2,true);
+
 }
 
 function showMore(index) {
@@ -61,7 +78,7 @@ function showMore(index) {
   if (app_status === 'toapprove') {
     statusButtons = `<button onclick="setStatus(${i},'approved')">APPROVE</button>`;
     statusButtons += `<button onclick="setStatus(${i},'rejected')">REJECT</button>`;
-  }else {
+  } else {
     statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
   }
   info_obj = document.createElement('div');
@@ -100,43 +117,51 @@ function hideMore(index) {
 }
 
 function setStatus(index, status) {
+  var req = new XMLHttpRequest();
   req.open('POST', `/applications/wl/setStatus?auth=${auth}`, false);
   req.setRequestHeader('Content-type', 'application/json');
   req.send(JSON.stringify({ index: index, status: status }));
-  if(req.responseText==='Succes'){
-    alert(`Status changed succesfully to ${status}`)
-  }else {
-    alert(`Error while changing status to ${status}`)
+  if (req.responseText === 'Succes') {
+    alert(`Status changed succesfully to ${status}`);
+  } else {
+    alert(`Error while changing status to ${status}`);
   }
-  location.reload();
+  getApplications();
 }
-showSection(-1);
-function showSection(id){
-  document.querySelector('#app_toapprove').style.display = 'none';
-  document.querySelector('#app_approved').style.display = 'none';
-  document.querySelector('#app_rejected').style.display = 'none';
-  document.querySelector('#toapp_B').innerHTML = "Show";
-  document.querySelector('#toapp_B').onclick = function(){showSection(0)}
-  document.querySelector('#rej_B').innerHTML = "Show";
-  document.querySelector('#rej_B').onclick = function(){showSection(1)}
-  document.querySelector('#app_B').innerHTML = "Show";
-  document.querySelector('#app_B').onclick = function(){showSection(2)}
-  if(id==0){
-    document.querySelector('#app_toapprove').style.display = '';
-    document.querySelector('#toapp_B').innerHTML = "Hide";
-    document.querySelector('#toapp_B').onclick = function(){showSection(-1)}
+
+function showSection(id, hide) {
+  function showSectionWithName(tag1,tag2){
+    document.querySelector(tag1).style.display = 'none';
+    document.querySelector(tag2).innerHTML = 'Show';
+    document.querySelector(tag2).onclick = function() {
+      showSection(id);
+    };
+    if (counts[id] < 1) {
+      document.querySelector(tag2).disabled = true;
+      return;
+    }
+    if (hide) return;
+    document.querySelector(tag1).style.display = '';
+    document.querySelector(tag2).innerHTML = 'Hide';
+    document.querySelector(tag2).onclick = function() {
+      showSection(id, true);
+    };
   }
-  if(id==1){
-    document.querySelector('#app_rejected').style.display = '';
-    document.querySelector('#rej_B').innerHTML = "Hide";
-    document.querySelector('#rej_B').onclick = function(){showSection(-1)}
+  if (id == 0) {
+   showSectionWithName('#app_toapprove','#toapp_B')
   }
-  if(id==2){
-    document.querySelector('#app_approved').style.display = '';
-    document.querySelector('#app_B').innerHTML = "Hide";
-    document.querySelector('#app_B').onclick = function(){showSection(-1)}
+  if (id == 1) {
+    showSectionWithName('#app_rejected','#rej_B')
+  }
+  if (id == 2) {
+    showSectionWithName('#app_approved','#app_B')
   }
 }
+
+getApplications();
+showSection(0, false);
+showSection(1, true);
+showSection(2, true);
 
 
 

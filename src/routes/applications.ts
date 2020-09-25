@@ -199,7 +199,7 @@ try {
 function addApplication(body: any) {
   body.status = 'toapprove'
   applications.push(body);
-  fs.writeFileSync('./applications.json', JSON.stringify(applications));
+  saveApplications()
 }
 
 function getApplications() {
@@ -220,6 +220,11 @@ function setStatus(index: number, status: any){
   body = applications[index];
   body.status = status
   applications[index] = body;
+  saveApplications()
+}
+
+function saveApplications(){
+  fs.writeFileSync('./applications.json', JSON.stringify(applications));
 }
 
 export default router;

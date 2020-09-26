@@ -51,6 +51,25 @@ router.post('/applications/wl/delete/bulk', function(req: Request, res: Response
     });
   }
 })
+
+function PatchUnsafeChars(application: { date: string; idea: string; old: number; name: string; action: string; know: string; hex: string; experience: string; story: string; dc: string }) {
+  let illegal_chars = ['<','>','{','}']
+
+  illegal_chars.forEach(el=>{
+    Object.keys(application).forEach(key=>{
+      if(Object.getOwnPropertyDescriptors(application)[key]&&Object.getOwnPropertyDescriptors(application)[key].value&&Object.getOwnPropertyDescriptors(application)[key].value.includes&&Object.getOwnPropertyDescriptors(application)[key].value.includes(el)){
+        let code = el.charCodeAt(0)
+        let body: any = {}
+        body = application;
+        while (body[key].includes(el))
+          body[key] = body[key].replace(el,`&#${code};`)
+        application = body;
+      }
+    })
+  })
+  return application
+}
+
 router.post('/applications/wl', function(req: Request, res: Response) {
   let cTL = checkTimeLock(req)
   if(cTL){
@@ -69,7 +88,7 @@ router.post('/applications/wl', function(req: Request, res: Response) {
     return;
   }
   setTimeLock(req,10*1000);
-  const application = {
+  let application = {
     name: req.body.name as string,
     date: req.body.date as string,
     idea: req.body.idea as string,
@@ -100,13 +119,14 @@ router.post('/applications/wl', function(req: Request, res: Response) {
   } else {
     let checkResult;
     checkResult = CheckApplication(application);
+    application = PatchUnsafeChars(application);
     if (!checkResult.error) {
       res.status(200).send({
         message: { error: false, txt: `Application Accepted!` },
         status: res.status
       });
       setTimeLock(req,20*60*1000,"You have recently sent application");
-      addApplication(req.body);
+      addApplication(application);
     } else {
       res.status(400).send({
         message: checkResult,
@@ -133,16 +153,6 @@ function CheckApplication(application: {
   const minimum1 = 40;
   const minimum2 = 100;
   const minimum3 = 200;
-  let illegal_chars = ['<','>']
-
-  illegal_chars.forEach(el=>{
-    Object.keys(application).forEach(key=>{
-      if(Object.getOwnPropertyDescriptors(application)[key].value&&Object.getOwnPropertyDescriptors(application)[key]&&Object.getOwnPropertyDescriptors(application)[key].value.includes(el))err.push({
-        err: `Validation failed - ${key} contains illegal character (${el})`,
-        cssSelector: `#${key}_q`
-      });
-    })
-  })
 
   if (application.old > 150||application.old<1)
     err.push({ err: 'Validation failed - Wrong old', cssSelector: '#old_q' });

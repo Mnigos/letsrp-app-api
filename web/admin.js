@@ -329,6 +329,53 @@ function getCookie(name) {
   }
 }
 
+function export_apps(type) {
+  switch (type) {
+    case 'json': {
+      download('applications.json', JSON.stringify(content, undefined, 4));
+    }
+      break;
+    case 'csv-s': {
+      let csv = 'ID;STATUS;NAME;DC;HEX;OLD;DATE;;STORY;IDEA;ACTION;EXPERIENCE\n';
+      let content2 = content;
+      content.forEach((el,i) => {
+        if (el.status === 'toapprove') {
+          csv += `${i};${el.status.replaceAll(';',',')};${el.name.replaceAll(';',',')};${el.dc.replaceAll(';',',')};${el.hex.replaceAll(';',',')};${el.old};${el.date.replaceAll(';',',')};;${el.story.replaceAll(';',',')};${el.idea.replaceAll(';',',')};${el.action.replaceAll(';',',')};${el.experience.replaceAll(';',',')}\n`;
+        }
+      });
+      csv+='\n'
+      content.forEach((el,i) => {
+        if (el.status === 'approved') {
+          csv += `${i};${el.status.replaceAll(';',',')};${el.name.replaceAll(';',',')};${el.dc.replaceAll(';',',')};${el.hex.replaceAll(';',',')};${el.old};${el.date.replaceAll(';',',')};;${el.story.replaceAll(';',',')};${el.idea.replaceAll(';',',')};${el.action.replaceAll(';',',')};${el.experience.replaceAll(';',',')}\n`;
+        }
+      });
+      csv+='\n'
+      content.forEach((el,i) => {
+        if (el.status === 'rejected') {
+          csv += `${i};${el.status.replaceAll(';',',')};${el.name.replaceAll(';',',')};${el.dc.replaceAll(';',',')};${el.hex.replaceAll(';',',')};${el.old};${el.date.replaceAll(';',',')};;${el.story.replaceAll(';',',')};${el.idea.replaceAll(';',',')};${el.action.replaceAll(';',',')};${el.experience.replaceAll(';',',')}\n`;
+        }
+      });
+      download('applications.csv', csv);
+    }
+      break;
+    case 'csv-i': {
+      let csv = 'ID;STATUS;NAME;DC;HEX;OLD;DATE;;STORY;IDEA;ACTION;EXPERIENCE\n';
+      content.forEach((el,i) => {
+        csv += `${i};${el.status.replaceAll(';',',')};${el.name.replaceAll(';',',')};${el.dc.replaceAll(';',',')};${el.hex.replaceAll(';',',')};${el.old};${el.date.replaceAll(';',',')};;${el.story.replaceAll(';',',')};${el.idea.replaceAll(';',',')};${el.action.replaceAll(';',',')};${el.experience.replaceAll(';',',')}\n`;
+      });
+      download('applications.csv', csv);
+    }
+      break;
+  }
+}
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+  element.click();
+}
+
 getApplications();
 showSection(0, false);
 showSection(1, true);

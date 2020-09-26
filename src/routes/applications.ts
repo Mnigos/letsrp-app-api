@@ -133,8 +133,18 @@ function CheckApplication(application: {
   const minimum1 = 40;
   const minimum2 = 100;
   const minimum3 = 200;
+  let illegal_chars = ['<','>']
 
-  if (application.old > 150)
+  illegal_chars.forEach(el=>{
+    Object.keys(application).forEach(key=>{
+      if(Object.getOwnPropertyDescriptors(application)[key].value&&Object.getOwnPropertyDescriptors(application)[key]&&Object.getOwnPropertyDescriptors(application)[key].value.includes(el))err.push({
+        err: `Validation failed - ${key} contains illegal character (${el})`,
+        cssSelector: `#${key}_q`
+      });
+    })
+  })
+
+  if (application.old > 150||application.old<1)
     err.push({ err: 'Validation failed - Wrong old', cssSelector: '#old_q' });
 
   if (application.know.length < minimum1)
@@ -188,6 +198,7 @@ function CheckApplication(application: {
       err: `Validation failed - Hex is empty`,
       cssSelector: '#hex_q'
     });
+
 
   if (err.length > 0) return { error: true, errors: err };
   return { error: false };

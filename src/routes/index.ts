@@ -1,14 +1,15 @@
 import { Request, Response, Router } from 'express';
 import { fdatasync } from 'fs';
 import fs from 'fs';
+import path from "path";
 const router = Router();
 
 router.get('/', function (req: Request, res: Response) {
-  res.sendfile('./web/form.html')
+  res.sendFile(path.join(__dirname, './../../web/form.html'));
 });
 
 router.get('/form.js', function (req: Request, res: Response) {
-	res.sendfile('./web/form.js')
+  res.sendFile(path.join(__dirname, './../../web/form.js'));
 });
 
 

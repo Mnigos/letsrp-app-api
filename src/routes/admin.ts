@@ -3,6 +3,7 @@ import { fdatasync, copyFile } from 'fs';
 import fs from 'fs';
 import router from './index';
 import exp from 'constants';
+import path from 'path';
 
 export let config: any = {};
 try {
@@ -63,12 +64,12 @@ export function setTimeLock(req:Request,lock:number,msg:string = ""){
 
 router.get('/admin', function(req: Request, res: Response) {
   if (checkAuth(req)) {
-    res.sendfile('./web/admin.html');
+    res.sendFile(path.join(__dirname, './../../web/admin.html'));
   } else {
-    res.sendfile('./web/admin-login.html');
+    res.sendFile(path.join(__dirname, './../../web/admin-login.html'));
   }
 
 });
 router.get('/admin.js', function(req: Request, res: Response) {
-  res.sendfile('./web/admin.js');
+  res.sendFile(path.join(__dirname, './../../web/admin.js'));
 });

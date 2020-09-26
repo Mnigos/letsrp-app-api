@@ -3,44 +3,23 @@ counts = [0, 0, 0];
 
 auth = getCookie('auth');
 
-function getApplications() {
+Array.prototype.removeAt = function() {
+  let index = arguments[0];
+  this.splice(index,1)
+  return this;
+};
+
+function showNodes(nodes) {
   document.querySelector(`#app_toapprove`).innerHTML = '';
   document.querySelector(`#app_rejected`).innerHTML = '';
   document.querySelector(`#app_approved`).innerHTML = '';
-  url = `/applications/wl/raw`;
-  counts = [0, 0, 0];
-  var req = new XMLHttpRequest();
-  req.open('GET', url, false);
-  req.setRequestHeader('authorization', auth);
-  req.send(null);
-  data = JSON.parse(req.responseText);
 
-  if (!data.message.error) {
-    content = data.message.content;
-    content.forEach((el, i) => {
-      app_status = el.status;
-      applications_obj = document.querySelector(`#app_${app_status}`);
-      obj = document.createElement('div');
-      obj.id = `app_${i}`;
-      obj.class = 'app_';
-      statusButtons = ``;
-      if (app_status === 'toapprove') counts[0] = counts[0] + 1;
-      if (app_status === 'rejected') counts[1] = counts[1] + 1;
-      if (app_status === 'approved') counts[2] = counts[2] + 1;
-      if (app_status === 'toapprove') {
-        statusButtons = `<button class="app_approve" onclick="setStatus(${i},'approved')">APPROVE</button>`;
-        statusButtons += `<button class="app_reject" onclick="setStatus(${i},'rejected')">REJECT</button>`;
-      } else {
-        statusButtons = `<button class="app_toapprove" onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
-      }
-      statusButtons += `<button class="app_delete" onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
+  nodes.forEach(el=>{
+    let app_status = el.getAttribute('status')
+    let applications_obj = document.querySelector(`#app_${app_status}`);
+    applications_obj.appendChild(el);
+  })
 
-      checkbox = `<input type="checkbox" id='app_${i}_checkbox' class="sel_checkbox" onclick="countChecks()">`;
-      statusButtons = `<div id="app_${i}_actions" class="app_actions"><button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>${statusButtons}</div>`;
-      obj.innerHTML = `<div id="app_${i}_content" class="app_content">${checkbox}  <div id="app_${i}_index" class="app_index app_field_txt">INDEX: ${i}</div> <div id="app_${i}_name" class="app_name app_field_txt">NAME: &nbsp;<b>${encodeURI(el.name)}</b></div><div id="app_${i}_dc" class="app_dc app_field_txt">DC: &nbsp;<b>${encodeURI(el.dc)}</b></div> <div id="app_${i}_old" class="app_old app_field_txt">OLD: &nbsp;<b>${encodeURI(el.old)}</b></div> <div id="app_${i}_date" class="app_date app_field_txt">DATE: &nbsp;<b>${encodeURI(el.date)}</b></div></div>` + statusButtons;
-      applications_obj.appendChild(obj);
-    });
-  }
   document.querySelector(`#app_toapprove_count`).innerHTML = counts[0];
   document.querySelector(`#app_rejected_count`).innerHTML = counts[1];
   document.querySelector(`#app_approved_count`).innerHTML = counts[2];
@@ -56,6 +35,49 @@ function getApplications() {
   countChecks();
 }
 
+function getApplications() {
+  nodes = []
+  let url = `/applications/wl/raw`;
+  counts = [0, 0, 0];
+  var req = new XMLHttpRequest();
+  req.open('GET', url, false);
+  req.setRequestHeader('authorization', auth);
+  req.send(null);
+  let data = JSON.parse(req.responseText);
+
+  if (!data.message.error) {
+    content = data.message.content;
+    content.forEach((el, i) => {
+      let obj = document.createElement('div');
+      let app_status = el.status;
+      obj.id = `app_${i}`;
+      obj.className = 'app';
+      obj.value = i;
+      obj.setAttribute('status',app_status)
+      obj.setAttribute('index',i)
+      obj.setAttribute('name',el.name)
+      obj.setAttribute('sent',el.sentstamp)
+      let statusButtons = ``;
+      if (app_status === 'toapprove') counts[0] = counts[0] + 1;
+      if (app_status === 'rejected') counts[1] = counts[1] + 1;
+      if (app_status === 'approved') counts[2] = counts[2] + 1;
+      if (app_status === 'toapprove') {
+        statusButtons = `<button class="app_approve" onclick="setStatus(${i},'approved')">APPROVE</button>`;
+        statusButtons += `<button class="app_reject" onclick="setStatus(${i},'rejected')">REJECT</button>`;
+      } else {
+        statusButtons = `<button class="app_toapprove" onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
+      }
+      statusButtons += `<button class="app_delete" onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
+
+      let checkbox = `<input type="checkbox" id='app_${i}_checkbox' index="${i}" class="sel_checkbox" onclick="countChecks()">`;
+      statusButtons = `<div id="app_${i}_actions" class="app_actions"><button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>${statusButtons}</div>`;
+      obj.innerHTML = `<div id="app_${i}_content" class="app_content">${checkbox}  <div id="app_${i}_index" class="app_index app_field_txt">INDEX: ${i}</div> <div id="app_${i}_name" class="app_name app_field_txt">NAME: &nbsp;<b>${encodeURI(el.name)}</b></div><div id="app_${i}_dc" class="app_dc app_field_txt">DC: &nbsp;<b>${encodeURI(el.dc)}</b></div> <div id="app_${i}_old" class="app_old app_field_txt">OLD: &nbsp;<b>${encodeURI(el.old)}</b></div> <div id="app_${i}_date" class="app_date app_field_txt">DATE: &nbsp;<b>${encodeURI(el.date)}</b></div></div>` + statusButtons;
+      nodes.push(obj);
+    });
+  }
+  showNodes(nodes);
+}
+
 function showMore(index) {
   thiscontent = content[index];
   document.querySelectorAll('.app_B').forEach(el => {
@@ -69,7 +91,7 @@ function showMore(index) {
     el.parentElement.removeChild(el);
   });
   i = index;
-  app_status = content[i].status;
+  app_status = content[i].status.toUpperCase();
   statusButtons = ``;
   if (app_status === 'toapprove') {
     statusButtons = `<button onclick="setStatus(${i},'approved')">APPROVE</button>`;
@@ -84,23 +106,40 @@ function showMore(index) {
   document.getElementById(`app_${index}`).appendChild(info_obj);
   info_obj.style['border-style'] = 'double';
   info_obj.style['line-break'] = 'anywhere';
+  let st_color = '#ff9900';
+  if(thiscontent.status==='approved')st_color = 'green'
+  if(thiscontent.status==='rejected')st_color = 'red'
+
   info_obj.innerHTML = `
-  INFO: (i=${index}) &nbsp;&nbsp;&nbsp; STATUS: ${app_status}<br>
-  NAME: <b>${thiscontent.name}</b><br>
-  DC: <b>${thiscontent.dc}</b><br>
-  HEX: <b>${thiscontent.hex}</b><br><br>
-  DATE: <b>${thiscontent.date}</b><br>
-  OLD: <b>${thiscontent.old}</b><br><br>
-  STORY: <b>${thiscontent.story}</b><br>
-  IDEA: <b>${thiscontent.idea}</b><br>
-  ACTION: <b>${thiscontent.action}</b><br>
-  EXPERIENCE: <b>${thiscontent.experience}</b><br>
+  <div style="display: inline; color: darkviolet;">INFO:</div> INDEX: ${index} &nbsp;&nbsp;&nbsp; STATUS: <div style="display: inline;color: ${st_color}">${app_status}</div> &nbsp;&nbsp;&nbsp; SENT: <div style="display: inline;color: blue">${formatDate(new Date(thiscontent.sentstamp))}</div><br>
+  <div style="display: inline; color: darkviolet;">NAME:</div> <b>${thiscontent.name}</b><br>
+  <div style="display: inline; color: darkviolet;">DC:</div> <b>${thiscontent.dc}</b><br>
+  <div style="display: inline; color: darkviolet;">HEX:</div> <b>${thiscontent.hex}</b><br><br>
+  <div style="display: inline; color: darkviolet;">DATE:</div> <b>${thiscontent.date}</b><br>
+  <div style="display: inline; color: darkviolet;">OLD:</div> <b>${thiscontent.old}</b><br><br>
+  <div style="display: inline; color: darkviolet;">STORY:</div> <b>${thiscontent.story}</b><br>
+  <div style="display: inline; color: darkviolet;">IDEA:</div> <b>${thiscontent.idea}</b><br>
+  <div style="display: inline; color: darkviolet;">ACTION:</div> <b>${thiscontent.action}</b><br>
+  <div style="display: inline; color: darkviolet;">EXPERIENCE:</div> <b>${thiscontent.experience}</b><br>
   <button onclick="info_obj.innerHTML = '';info_obj.style['border-style'] = '';">HIDE</button>
   ${statusButtons}
   `;
 
 }
+function formatDate(date) {
+  var d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear();
+  if(d.toString() === 'Invalid Date')return "Invalid Date";
 
+  if (month.length < 2)
+    month = '0' + month;
+  if (day.length < 2)
+    day = '0' + day;
+
+  return [year, month, day].join('-')+' : '+[d.getHours(),d.getMinutes(),d.getSeconds()].join(':');
+}
 function hideMore(index) {
   document.querySelectorAll('.app_B').forEach(el => {
     el.innerHTML = 'MORE';
@@ -179,13 +218,13 @@ function showSection(id, hide) {
     };
   }
 
-  if (id == 0) {
+  if (id === 0) {
     showSectionWithName('#app_toapprove', '#toapp_B');
   }
-  if (id == 1) {
+  if (id === 1) {
     showSectionWithName('#app_rejected', '#rej_B');
   }
-  if (id == 2) {
+  if (id === 2) {
     showSectionWithName('#app_approved', '#app_B');
   }
 }
@@ -218,7 +257,7 @@ function countChecks() {
 
   checkboxes.forEach(el => {
     if (el.checked === true) {
-      index = el.id.replace('_checkbox', '').replace('app_', '');
+      index = el.getAttribute('index');
       selectedIndexes.push(index);
     }
   });
@@ -227,15 +266,15 @@ function countChecks() {
   section1_boxes = [];
   section2_boxes = [];
   checkboxes.forEach(el => {
-    index = el.id.replace('_checkbox', '').replace('app_', '');
+    index = el.getAttribute('index')
     if (content[index].status === 'toapprove') section0_boxes.push(el);
   });
   checkboxes.forEach(el => {
-    index = el.id.replace('_checkbox', '').replace('app_', '');
+    index = el.getAttribute('index')
     if (content[index].status === 'rejected') section1_boxes.push(el);
   });
   checkboxes.forEach(el => {
-    index = el.id.replace('_checkbox', '').replace('app_', '');
+    index = el.getAttribute('index')
     if (content[index].status === 'approved') section2_boxes.push(el);
   });
 
@@ -305,7 +344,7 @@ function selectSection(section) {
 
   checkboxes.forEach(el => {
     if (section < 0) el.checked = false;
-    index = el.id.replace('_checkbox', '').replace('app_', '');
+    index = el.getAttribute('index')
     if (section === 0 && content[index].status === 'toapprove') el.checked = state;
     if (section === 1 && content[index].status === 'rejected') el.checked = state;
     if (section === 2 && content[index].status === 'approved') el.checked = state;
@@ -376,6 +415,64 @@ function download(filename, text) {
   element.click();
 }
 
+function sort(type){
+  let applications = document.querySelectorAll('.app')
+  switch (type){
+    case 'i':{
+      showNodes(nodes);
+    }break;
+    case '!i':{
+      showNodes(nodes.concat().reverse());
+    }break;
+    case 'l':{
+      let sortedNodes = []
+      let leftNodes = nodes.concat();
+      while (leftNodes.length>0){
+        let min_i = 0;
+        leftNodes.forEach((el,i)=>{
+          if(el.getAttribute('sent')<leftNodes[min_i].getAttribute('sent')){
+            min_i = i;
+          }
+        })
+        sortedNodes.push(leftNodes[min_i])
+        leftNodes = leftNodes.removeAt(min_i)
+      }
+      showNodes(sortedNodes);
+
+    }break;
+    case 'o':{
+      let sortedNodes = []
+      let leftNodes = nodes.concat();
+      while (leftNodes.length>0){
+        let min_i = 0;
+        leftNodes.forEach((el,i)=>{
+          if(el.getAttribute('sent')>leftNodes[min_i].getAttribute('sent')){
+            min_i = i;
+          }
+        })
+        sortedNodes.push(leftNodes[min_i])
+        leftNodes = leftNodes.removeAt(min_i)
+      }
+      showNodes(sortedNodes);
+
+    }break;
+    case 'na':{
+      let sortedNodes = []
+      let leftNodes = nodes.concat();
+      sortedNodes = leftNodes.sort((a, b) => a.getAttribute('name').localeCompare(b.getAttribute('name')))
+
+      showNodes(sortedNodes);
+    }break;
+    case 'nz':{
+      let sortedNodes = []
+      let leftNodes = nodes.concat();
+      sortedNodes = leftNodes.sort((a, b) => b.getAttribute('name').localeCompare(a.getAttribute('name')))
+
+      showNodes(sortedNodes);
+    }break;
+  }
+}
+
 getApplications();
 showSection(0, false);
 showSection(1, true);
@@ -384,4 +481,4 @@ showSection(2, true);
 document.querySelector('#app_toapprove_checkbox').checked = false;
 document.querySelector('#app_rejected_checkbox').checked = false;
 document.querySelector('#app_approved_checkbox').checked = false;
-
+document.querySelector('#sorting_i').click()

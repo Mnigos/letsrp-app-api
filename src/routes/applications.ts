@@ -52,7 +52,7 @@ router.post('/applications/wl/delete/bulk', function(req: Request, res: Response
   }
 })
 
-function PatchUnsafeChars(application: { date: string; idea: string; old: number; name: string; action: string; know: string; hex: string; experience: string; story: string; dc: string }) {
+function PatchUnsafeChars(application: { date: string; idea: string; old: number; name: string; action: string; know: string; hex: string; experience: string; story: string; dc: string; sentstamp: number; }) {
   let illegal_chars = ['<','>','{','}']
 
   illegal_chars.forEach(el=>{
@@ -88,7 +88,7 @@ router.post('/applications/wl', function(req: Request, res: Response) {
     return;
   }
   setTimeLock(req,10*1000);
-  let application = {
+  let application  = {
     name: req.body.name as string,
     date: req.body.date as string,
     idea: req.body.idea as string,
@@ -98,7 +98,8 @@ router.post('/applications/wl', function(req: Request, res: Response) {
     know: req.body.know as string,
     experience: req.body.experience as string,
     dc: req.body.dc as string,
-    hex: req.body.hex as string
+    hex: req.body.hex as string,
+    sentstamp: undefined as number
   };
 
   const validation = checkTypes(req.body);
@@ -126,6 +127,7 @@ router.post('/applications/wl', function(req: Request, res: Response) {
         status: res.status
       });
       setTimeLock(req,20*60*1000,"You have recently sent application");
+      application.sentstamp = + new Date();
       addApplication(application);
     } else {
       res.status(400).send({

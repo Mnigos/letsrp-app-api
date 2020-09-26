@@ -55,6 +55,15 @@
 </head>
 <body>
 ADMIN PANEL <button onclick="export_apps('json')">EXPORT (.json)</button><button onclick="export_apps('csv-i')">EXPORT (.csv - sorted by index)</button><button onclick="export_apps('csv-s')">EXPORT (.csv - sorted by status)</button>
+<br>
+SORTING: &nbsp;
+INDEX: <input id="sorting_i" onclick="sort('i')" type="radio" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+!INDEX: <input id="sorting_!i" onclick="sort('!i')" type="radio" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+LATEST: <input id="sorting_latest" type="radio" onclick="sort('l')" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+OLDEST: <input id="sorting_oldest" type="radio" onclick="sort('o')" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+NAME (A-Z): <input id="sorting_nameA" type="radio" onclick="sort('na')" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+NAME (Z-A): <input id="sorting_nameZ" type="radio" onclick="sort('nz')" name="sorting">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
 <div>SELECTION (<div id="selection_count" style="display: inline">0</div>): <div style="display: inline" id="selection_actions"><button class="sel_action" onclick="deleteSelection()"><div style="display: inline;color: red">DELETE</div></button><button class="sel_action" onclick="setStatusSelection('approved')">APPROVE</button><button class="sel_action" onclick="setStatusSelection('rejected')">REJECT</button><button class="sel_action" onclick="setStatusSelection('toapprove')">DELETE STATUS</button><button class="sel_action" onclick="deselectAll()">DESELECT</button></div></div>
 <br>
 <div id="applications">

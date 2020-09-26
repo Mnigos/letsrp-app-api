@@ -1,28 +1,17 @@
 auth = '';
 counts = [0, 0, 0];
 
-if (location.href.split('?').length > 1) {
-  let args = location.href.split('?')[1].split('=');
-  if (args) {
-    args.forEach((el, i) => {
-      if (el === 'auth') {
-        if (args[i + 1]) {
-          auth = args[i + 1];
-        }
-      }
-    });
-  }
-}
-
+auth = getCookie('auth');
 
 function getApplications() {
   document.querySelector(`#app_toapprove`).innerHTML = '';
   document.querySelector(`#app_rejected`).innerHTML = '';
   document.querySelector(`#app_approved`).innerHTML = '';
-  url = `/applications/wl/raw?auth=${auth}`;
+  url = `/applications/wl/raw`;
   counts = [0, 0, 0];
   var req = new XMLHttpRequest();
   req.open('GET', url, false);
+  req.setRequestHeader('authorization', auth);
   req.send(null);
   data = JSON.parse(req.responseText);
 
@@ -47,7 +36,7 @@ function getApplications() {
       statusButtons += `<button class="app_delete" onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
 
       checkbox = `<input type="checkbox" id='app_${i}_checkbox' class="sel_checkbox" onclick="countChecks()">`;
-      statusButtons = `<div id="app_${i}_actions" class="app_actions"><button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>${statusButtons}</div>`
+      statusButtons = `<div id="app_${i}_actions" class="app_actions"><button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>${statusButtons}</div>`;
       obj.innerHTML = `<div id="app_${i}_content" class="app_content">${checkbox}  <div id="app_${i}_index" class="app_index app_field_txt">INDEX: ${i}</div> <div id="app_${i}_name" class="app_name app_field_txt">NAME: &nbsp;<b>${encodeURI(el.name)}</b></div><div id="app_${i}_dc" class="app_dc app_field_txt">DC: &nbsp;<b>${encodeURI(el.dc)}</b></div> <div id="app_${i}_old" class="app_old app_field_txt">OLD: &nbsp;<b>${encodeURI(el.old)}</b></div> <div id="app_${i}_date" class="app_date app_field_txt">DATE: &nbsp;<b>${encodeURI(el.date)}</b></div></div>` + statusButtons;
       applications_obj.appendChild(obj);
     });
@@ -126,7 +115,8 @@ function hideMore(index) {
 
 function setStatus(index, status) {
   var req = new XMLHttpRequest();
-  req.open('POST', `/applications/wl/setStatus?auth=${auth}`, false);
+  req.open('POST', `/applications/wl/setStatus`, false);
+  req.setRequestHeader('authorization', auth);
   req.setRequestHeader('Content-type', 'application/json');
   req.send(JSON.stringify({ index: index, status: status }));
   if (req.responseText === 'Success') {
@@ -139,7 +129,8 @@ function setStatus(index, status) {
 
 function setStatusBulk(elements, status) {
   var req = new XMLHttpRequest();
-  req.open('POST', `/applications/wl/setStatus/bulk?auth=${auth}`, false);
+  req.open('POST', `/applications/wl/setStatus/bulk`, false);
+  req.setRequestHeader('authorization', auth);
   req.setRequestHeader('Content-type', 'application/json');
   req.send(JSON.stringify({ elements: elements, status: status }));
   if (req.responseText === 'Success') {
@@ -154,7 +145,8 @@ function deleteBulk(elements) {
   if (confirm(`Are you sure you want to delete ALL of ${JSON.stringify(elements)} application?`)) {
     if (confirm(`Are you REALLY sure you want to delete ALL of ${JSON.stringify(elements)} application?`)) {
       var req = new XMLHttpRequest();
-      req.open('POST', `/applications/wl/delete/bulk?auth=${auth}`, false);
+      req.open('POST', `/applications/wl/delete/bulk`, false);
+      req.setRequestHeader('authorization', auth);
       req.setRequestHeader('Content-type', 'application/json');
       req.send(JSON.stringify({ elements: elements }));
       if (req.responseText === 'Success') {
@@ -201,8 +193,9 @@ function showSection(id, hide) {
 function deleteApplication(index) {
   if (confirm(`Are you sure you want to delete #${index} application?`)) {
     var req = new XMLHttpRequest();
-    req.open('POST', `/applications/wl/delete?auth=${auth}`, false);
+    req.open('POST', `/applications/wl/delete`, false);
     req.setRequestHeader('Content-type', 'application/json');
+    req.setRequestHeader('authorization', auth);
     req.send(JSON.stringify({ index: index }));
     if (req.responseText === 'Success') {
       alert(`Application deleted`);
@@ -280,14 +273,14 @@ function countChecks() {
 
   document.getElementById('selection_count').innerHTML = selectedIndexes.length;
 
-  if(selectedIndexes.length>0){
-    document.querySelectorAll('.sel_action').forEach(el=>{
+  if (selectedIndexes.length > 0) {
+    document.querySelectorAll('.sel_action').forEach(el => {
       el.disabled = false;
-    })
-  }else {
-    document.querySelectorAll('.sel_action').forEach(el=>{
+    });
+  } else {
+    document.querySelectorAll('.sel_action').forEach(el => {
       el.disabled = true;
-    })
+    });
   }
 }
 
@@ -296,7 +289,7 @@ function deleteSelection() {
 }
 
 function setStatusSelection(status) {
-  setStatusBulk(selectedIndexes,status);
+  setStatusBulk(selectedIndexes, status);
 }
 
 function selectSection(section) {
@@ -306,12 +299,12 @@ function selectSection(section) {
   if (section === 1) tag = '#app_rejected_checkbox';
   if (section === 2) tag = '#app_approved_checkbox';
   state = false;
-  if(section>=0)
-  state = document.querySelector(tag).checked;
+  if (section >= 0)
+    state = document.querySelector(tag).checked;
   checkboxes = document.querySelectorAll('.sel_checkbox');
 
   checkboxes.forEach(el => {
-    if(section<0)el.checked = false;
+    if (section < 0) el.checked = false;
     index = el.id.replace('_checkbox', '').replace('app_', '');
     if (section === 0 && content[index].status === 'toapprove') el.checked = state;
     if (section === 1 && content[index].status === 'rejected') el.checked = state;
@@ -320,11 +313,20 @@ function selectSection(section) {
   countChecks();
 }
 
-function deselectAll(){
-  selectSection(-1)
+function deselectAll() {
+  selectSection(-1);
   document.querySelector('#app_toapprove_checkbox').checked = false;
   document.querySelector('#app_rejected_checkbox').checked = false;
   document.querySelector('#app_approved_checkbox').checked = false;
+}
+
+function getCookie(name) {
+  try {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  } catch {
+  }
 }
 
 getApplications();

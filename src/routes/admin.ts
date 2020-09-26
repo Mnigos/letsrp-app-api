@@ -13,24 +13,21 @@ try {
 if (!config.password) config.password = 'password';
 
 export function checkAuth(req: Request) {
+  function getCookie(name:string) {
+    try {
+      const value = `; ${req.header('cookie')}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    } catch {
+    }
+  }
+  if(getCookie('auth')===exports.config.password){
+    return true;
+  }
   if (req.headers.authorization == exports.config.password) {
     return true;
   }
-  let status = false;
-  if (req.url.split('?').length > 1) {
-    let args = req.url.split('?')[1].split('=');
-    if(!args)return
-    args.forEach((el, i) => {
-      if (el == 'auth') {
-        if (args[i + 1] && args[i + 1] == exports.config.password) {
-          status = true;
-        }
-      }
-    });
-  }
-
-
-  return status;
+  return false;
 }
 let lastconnections:any = {}
 let lockconnections:any = {}

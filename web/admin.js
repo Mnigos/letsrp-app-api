@@ -39,16 +39,16 @@ function getApplications() {
       if (app_status === 'rejected') counts[1] = counts[1] + 1;
       if (app_status === 'approved') counts[2] = counts[2] + 1;
       if (app_status === 'toapprove') {
-        statusButtons = `<button onclick="setStatus(${i},'approved')">APPROVE</button>`;
-        statusButtons += `<button onclick="setStatus(${i},'rejected')">REJECT</button>`;
+        statusButtons = `<button class="app_approve" onclick="setStatus(${i},'approved')">APPROVE</button>`;
+        statusButtons += `<button class="app_reject" onclick="setStatus(${i},'rejected')">REJECT</button>`;
       } else {
-        statusButtons = `<button onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
+        statusButtons = `<button class="app_toapprove" onclick="setStatus(${i},'toapprove')">DELETE STATUS</button>`;
       }
-      statusButtons += `<button onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
+      statusButtons += `<button class="app_delete" onclick="deleteApplication(${i})"><div style="display: inline;color: red">DELETE</div></button>`;
 
       checkbox = `<input type="checkbox" id='app_${i}_checkbox' class="sel_checkbox" onclick="countChecks()">`;
-
-      obj.innerHTML = `&nbsp;&nbsp;&nbsp;${checkbox}  INDEX: ${i} &nbsp;&nbsp;&nbsp; NAME: <b>${encodeURI(el.name)}</b>&nbsp;&nbsp; DC: ${encodeURI(el.dc)} -&nbsp;&nbsp;- &nbsp;OLD: ${encodeURI(el.old)} &nbsp;&nbsp; DATE: ${encodeURI(el.date)} <button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>` + statusButtons;
+      statusButtons = `<div id="app_${i}_actions" class="app_actions"><button id='app_${i}_B' class="app_B" onclick="showMore(${i})">MORE</button>${statusButtons}</div>`
+      obj.innerHTML = `<div id="app_${i}_content" class="app_content">${checkbox}  <div id="app_${i}_index" class="app_index app_field_txt">INDEX: ${i}</div> <div id="app_${i}_name" class="app_name app_field_txt">NAME: &nbsp;<b>${encodeURI(el.name)}</b></div><div id="app_${i}_dc" class="app_dc app_field_txt">DC: &nbsp;<b>${encodeURI(el.dc)}</b></div> <div id="app_${i}_old" class="app_old app_field_txt">OLD: &nbsp;<b>${encodeURI(el.old)}</b></div> <div id="app_${i}_date" class="app_date app_field_txt">DATE: &nbsp;<b>${encodeURI(el.date)}</b></div></div>` + statusButtons;
       applications_obj.appendChild(obj);
     });
   }

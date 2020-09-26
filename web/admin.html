@@ -3,15 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <style>.app_content {
+      border-style: solid;
+      border-color: darkgray;
+      margin-left: 20px;
+      display: inline-block;
+      width: 70%;
+      height: 20px;
+  }
+  .app_actions{
+      border-style: solid;
+      border-color: darkgray;
+      height: 20px;
+      width: 23%;
+      display: inline-block;
+      background-color: darkgray;
+  }
+  .app_field_txt{
+      display: inline-flex;
+      width: 10%;
+  }
+  .app_name, .app_dc, .app_date{
+      width: 25%;
+  }
+  .app_toapprove{
+      width: 50%;
+  }
+  .app_reject, .app_approve{
+      width: 25%;
+  }
+  .app_delete{
+      margin-left: 5%;
+      width: 20%;
+  }
+  .app_B{
+      margin-right: 5%;
+      width: 20%;
+  }
+  .section{
+      border-style: double;
+      margin-bottom: 5px;
+  }
+  #info{
+      margin: 5px;
+  }
+  </style>
 </head>
 <body>
 ADMIN PANEL
 <div>SELECTION (<div id="selection_count" style="display: inline">0</div>): <div style="display: inline" id="selection_actions"><button class="sel_action" onclick="deleteSelection()"><div style="display: inline;color: red">DELETE</div></button><button class="sel_action" onclick="setStatusSelection('approved')">APPROVE</button><button class="sel_action" onclick="setStatusSelection('rejected')">REJECT</button><button class="sel_action" onclick="setStatusSelection('toapprove')">DELETE STATUS</button><button class="sel_action" onclick="deselectAll()">DESELECT</button></div></div>
 <br>
 <div id="applications">
-  <b><div style="color:#ff9900" id="app_toapprove_p"><input type="checkbox" id='app_toapprove_checkbox' class="checkbox" onclick="selectSection(0)">TO APPROVE (<div id="app_toapprove_count" style="display: inline">0</div>) <button id="toapp_B" onclick="showSection(0)">SHOW</button><div id="app_toapprove"></div></div></b>
-  <b><div style="color:#990000" id="app_rejected_p"><input type="checkbox" id='app_rejected_checkbox' class="checkbox" onclick="selectSection(1)">REJECTED (<div id="app_rejected_count" style="display: inline">0</div>) <button id="rej_B" onclick="showSection(1)">SHOW</button><div id="app_rejected"></div></div></b>
-  <b><div style="color:green" id="app_approved_p"><input type="checkbox" id='app_approved_checkbox' class="checkbox" onclick="selectSection(2)">APPROVED (<div id="app_approved_count" style="display: inline">0</div>) <button id="app_B" onclick="showSection(2)">SHOW</button><div id="app_approved"></div></div></b>
+  <b><div style="color:#ff9900" id="app_toapprove_p" class="section"><input type="checkbox" id='app_toapprove_checkbox' class="checkbox" onclick="selectSection(0)">TO APPROVE (<div id="app_toapprove_count" style="display: inline">0</div>) <button id="toapp_B" onclick="showSection(0)">SHOW</button><div id="app_toapprove"></div></div></b>
+  <b><div style="color:#990000" id="app_rejected_p" class="section"><input type="checkbox" id='app_rejected_checkbox' class="checkbox" onclick="selectSection(1)">REJECTED (<div id="app_rejected_count" style="display: inline">0</div>) <button id="rej_B" onclick="showSection(1)">SHOW</button><div id="app_rejected"></div></div></b>
+  <b><div style="color:green" id="app_approved_p" class="section"><input type="checkbox" id='app_approved_checkbox' class="checkbox" onclick="selectSection(2)">APPROVED (<div id="app_approved_count" style="display: inline">0</div>) <button id="app_B" onclick="showSection(2)">SHOW</button><div id="app_approved"></div></div></b>
 </div>
 
 <script src="/admin.js"></script>

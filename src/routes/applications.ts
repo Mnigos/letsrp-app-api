@@ -29,24 +29,20 @@ router.get('/applications', function (req: Request, res: Response) {
 });
 
 router.post('/applications/wl', function (req: Request, res: Response) {
-  const application = {
-    name: req.body.name as string,
-    date: req.body.date as string,
-    idea: req.body.idea as string,
-    story: req.body.story as string,
-    action: req.body.action as string,
-    old: req.body.old as number,
-    know: req.body.know as string,
-    experience: req.body.experience as string,
-    dc: req.body.dc as string,
-    hex: req.body.hex as string
-  };
+  const nameLength = 2;
+  const ideaLength = 20;
+  const storyLength = 200;
+  const actionLength = 50;
+  const knowLength = 10;
+  const experienceLength = 10;
 
-  const objectValidation = (
+  const requireObjectLength = (
     obj: any,
     keys: string[],
-    expectedType: string[],
-    ) => keys.every(key => obj[key].length === expectedType[]);
+    expectedlength: string[],
+    ) => keys.every(key => obj[key].length >= expectedlength.forEach(item => {
+      return item;
+    }));
 
   const requireObjectKeysType = (
     obj: any,

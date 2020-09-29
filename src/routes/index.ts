@@ -5,7 +5,7 @@ const router = Router();
 router.get('/', function (req: Request, res: Response) {
   res.status(200).send({
     message: 'Success',
-    status: res.status
+    status: res.statusCode
   });
 });
 

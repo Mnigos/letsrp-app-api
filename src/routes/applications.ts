@@ -8,46 +8,43 @@ router.get('/applications', (req: Request, res: Response) => {
     status: res.statusCode
   });
 });
-
-<<<<<<< HEAD
 router.post('/applications/wl', function (req: Request, res: Response) {
 
   const requireObjectLength = (
     obj: any,
     keys: string[],
     expectedlength: number[],
-    ) => keys.every(key => obj[key].length >= expectedlength.forEach(item => {
-      return item;
-    }));
+    ) => {
+      let bool = true;
+      keys.forEach((key, i ) => {
+        if (obj[key].length < expectedlength[i]) bool = false;
+      });
+      return bool;
+    }
 
-=======
-router.post('/applications/wl', (req: Request, res: Response) => {
-  /* eslint-disable valid-typeof */
->>>>>>> 3d0b1fdecf163ddd0bdf03a4403d88216bcc23af
   const requireObjectKeysType = (
     obj: any,
     keys: string[],
     expectedType: string = 'string'
   ) => keys.every(key => typeof obj[key] === expectedType);
-  /* eslint-enable */
 
   const ValidationLength = requireObjectLength(
     req.body,
     [
       'name',
-      'idea',
+      /*'idea',
       'story',
       'action',
       'know',
-      'experience',
+      'experience',*/
     ],
     [
       2,
-      20,
+      /*20,
       200,
       50,
       10,
-      10
+      10*/
     ]
     );
 

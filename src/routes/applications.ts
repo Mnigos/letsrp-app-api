@@ -29,17 +29,11 @@ router.get('/applications', function (req: Request, res: Response) {
 });
 
 router.post('/applications/wl', function (req: Request, res: Response) {
-  const nameLength = 2;
-  const ideaLength = 20;
-  const storyLength = 200;
-  const actionLength = 50;
-  const knowLength = 10;
-  const experienceLength = 10;
 
   const requireObjectLength = (
     obj: any,
     keys: string[],
-    expectedlength: string[],
+    expectedlength: number[],
     ) => keys.every(key => obj[key].length >= expectedlength.forEach(item => {
       return item;
     }));
@@ -49,6 +43,26 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     keys: string[],
     expectedType: string = 'string',
   ) => keys.every(key => typeof obj[key] === expectedType);
+
+  const ValidationLength = requireObjectLength(
+    req.body,
+    [
+      'name',
+      'idea',
+      'story',
+      'action',
+      'know',
+      'experience',
+    ],
+    [
+      2,
+      20,
+      200,
+      50,
+      10,
+      10
+    ]
+    );
 
   const validationString = requireObjectKeysType(
     req.body,
@@ -67,7 +81,7 @@ router.post('/applications/wl', function (req: Request, res: Response) {
   );
   const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
 
-  if (!validationString || !validationNumber) {
+  if (!validationString || !validationNumber || !ValidationLength) {
     res.status(406).send({
       message: 'Validation failed',
       status: res.status

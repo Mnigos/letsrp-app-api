@@ -32,19 +32,19 @@ router.post('/applications/wl', function (req: Request, res: Response) {
     req.body,
     [
       'name',
-      /*'idea',
+      'idea',
       'story',
       'action',
       'know',
-      'experience',*/
+      'experience',
     ],
     [
       2,
-      /*20,
+      20,
       200,
       50,
       10,
-      10*/
+      10
     ]
     );
 

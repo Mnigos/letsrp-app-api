@@ -2,25 +2,6 @@ import { Request, Response, Router } from 'express';
 
 const router = Router();
 
-declare global {
-  namespace Express {
-    interface Request {
-      body: {
-        name: string;
-        date: string;
-        idea: string;
-        story: string;
-        action: string;
-        old: number;
-        know: string;
-        experience: string;
-        dc: string;
-        hex: string;
-      };
-    }
-  }
-}
-
 router.get('/applications', function (req: Request, res: Response) {
   res.status(200).send({
     message: 'Success',

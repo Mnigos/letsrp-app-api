@@ -5,7 +5,7 @@ const router = Router();
 router.get('/applications', function (req: Request, res: Response) {
   res.status(200).send({
     message: 'Success',
-    status: res.status
+    status: res.statusCode
   });
 });
 
@@ -38,12 +38,12 @@ router.post('/applications/wl', function (req: Request, res: Response) {
   if (!validationString || !validationNumber) {
     res.status(406).send({
       message: 'Validation failed',
-      status: res.status
+      status: res.statusCode
     });
   } else {
     res.status(202).send({
       message: 'Accepted',
-      status: res.status
+      status: res.statusCode
     });
   }
 });

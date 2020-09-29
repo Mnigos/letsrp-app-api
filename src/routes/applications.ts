@@ -2,32 +2,14 @@ import { Request, Response, Router } from 'express';
 
 const router = Router();
 
-declare global {
-  namespace Express {
-    interface Request {
-      body: {
-        name: string;
-        date: string;
-        idea: string;
-        story: string;
-        action: string;
-        old: number;
-        know: string;
-        experience: string;
-        dc: string;
-        hex: string;
-      };
-    }
-  }
-}
-
-router.get('/applications', function (req: Request, res: Response) {
+router.get('/applications', (req: Request, res: Response) => {
   res.status(200).send({
     message: 'Success',
-    status: res.status
+    status: res.statusCode
   });
 });
 
+<<<<<<< HEAD
 router.post('/applications/wl', function (req: Request, res: Response) {
 
   const requireObjectLength = (
@@ -38,11 +20,16 @@ router.post('/applications/wl', function (req: Request, res: Response) {
       return item;
     }));
 
+=======
+router.post('/applications/wl', (req: Request, res: Response) => {
+  /* eslint-disable valid-typeof */
+>>>>>>> 3d0b1fdecf163ddd0bdf03a4403d88216bcc23af
   const requireObjectKeysType = (
     obj: any,
     keys: string[],
-    expectedType: string = 'string',
+    expectedType: string = 'string'
   ) => keys.every(key => typeof obj[key] === expectedType);
+  /* eslint-enable */
 
   const ValidationLength = requireObjectLength(
     req.body,
@@ -84,12 +71,12 @@ router.post('/applications/wl', function (req: Request, res: Response) {
   if (!validationString || !validationNumber || !ValidationLength) {
     res.status(406).send({
       message: 'Validation failed',
-      status: res.status
+      status: res.statusCode
     });
   } else {
     res.status(202).send({
       message: 'Accepted',
-      status: res.status
+      status: res.statusCode
     });
   }
 });

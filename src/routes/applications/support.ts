@@ -8,20 +8,16 @@ router.post('/support', function (req: Request, res: Response) {
     req.body,
     [
       'name',
-      'idea',
-      'story',
-      'action',
-      'know',
-      'experience',
+      'about',
+      'whyU',
+      'experienceSup',
       'hex'
     ],
     [
       2,
       20,
-      200,
-      50,
-      10,
-      10,
+      20,
+      20,
       15
     ]
     );
@@ -29,13 +25,10 @@ router.post('/support', function (req: Request, res: Response) {
     const validationRegexp = checkingObjectRegexp(
       req.body,
       [
-        'date',
         'dc'
       ],
       [
-        /^([0-2][0-9]|[0-9]|3[0-1])-(([0][0-9])|[0-9]|1[0-2])-[0-9]{4}$/,
         /.{1,}#[0-9]{4}|[0-9]{18}$/,
-
       ]
     )
 
@@ -43,12 +36,9 @@ router.post('/support', function (req: Request, res: Response) {
     req.body,
     [
       'name',
-      'date',
-      'idea',
-      'story',
-      'action',
-      'know',
-      'experience',
+      'about',
+      'whyU',
+      'experienceSup',
       'dc',
       'hex'
     ],

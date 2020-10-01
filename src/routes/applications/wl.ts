@@ -1,15 +1,9 @@
 import { Request, Response, Router } from 'express';
-import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from './../validation';
+import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from '../../validation';
 
 const router = Router();
 
-router.get('/applications', (req: Request, res: Response) => {
-  res.status(200).send({
-    message: 'Success',
-    status: res.statusCode
-  });
-});
-router.post('/applications/wl', function (req: Request, res: Response) {
+router.post('/wl', function (req: Request, res: Response) {
   const ValidationLength = requireObjectLength(
     req.body,
     [

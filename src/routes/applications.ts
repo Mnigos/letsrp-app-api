@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from './../validation';
 
 const router = Router();
 
@@ -9,25 +10,6 @@ router.get('/applications', (req: Request, res: Response) => {
   });
 });
 router.post('/applications/wl', function (req: Request, res: Response) {
-
-  const requireObjectLength = (
-    obj: any,
-    keys: string[],
-    expectedlength: number[],
-    ) => {
-      let bool = true;
-      keys.forEach((key, i ) => {
-        if (obj[key].length < expectedlength[i]) bool = false;
-      });
-      return bool;
-    }
-
-  const requireObjectKeysType = (
-    obj: any,
-    keys: string[],
-    expectedType: string = 'string'
-  ) => keys.every(key => typeof obj[key] === expectedType);
-
   const ValidationLength = requireObjectLength(
     req.body,
     [
@@ -37,6 +19,7 @@ router.post('/applications/wl', function (req: Request, res: Response) {
       'action',
       'know',
       'experience',
+      'hex'
     ],
     [
       2,
@@ -44,9 +27,23 @@ router.post('/applications/wl', function (req: Request, res: Response) {
       200,
       50,
       10,
-      10
+      10,
+      15
     ]
     );
+
+    const validationRegexp = checkingObjectRegexp(
+      req.body,
+      [
+        'date',
+        'dc'
+      ],
+      [
+        /^([0-2][0-9]|[0-9]|3[0-1])-(([0][0-9])|[0-9]|1[0-2])-[0-9]{4}$/,
+        /.{1,}#[0-9]{4}|[0-9]{18}$/,
+
+      ]
+    )
 
   const validationString = requireObjectKeysType(
     req.body,
@@ -65,7 +62,7 @@ router.post('/applications/wl', function (req: Request, res: Response) {
   );
   const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
 
-  if (!validationString || !validationNumber || !ValidationLength) {
+  if (!validationString || !validationNumber || !ValidationLength || !validationRegexp) {
     res.status(406).send({
       message: 'Validation failed',
       status: res.statusCode

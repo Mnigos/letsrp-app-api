@@ -3,21 +3,25 @@ import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } fro
 
 const router = Router();
 
-router.post('/wl', function (req: Request, res: Response) {
+router.post('/support', function (req: Request, res: Response) {
   const ValidationLength = requireObjectLength(
     req.body,
     [
       'name',
-      'about',
-      'whyU',
-      'experienceSup',
+      'idea',
+      'story',
+      'action',
+      'know',
+      'experience',
       'hex'
     ],
     [
       2,
       20,
-      20,
-      20,
+      200,
+      50,
+      10,
+      10,
       15
     ]
     );
@@ -25,10 +29,13 @@ router.post('/wl', function (req: Request, res: Response) {
     const validationRegexp = checkingObjectRegexp(
       req.body,
       [
+        'date',
         'dc'
       ],
       [
+        /^([0-2][0-9]|[0-9]|3[0-1])-(([0][0-9])|[0-9]|1[0-2])-[0-9]{4}$/,
         /.{1,}#[0-9]{4}|[0-9]{18}$/,
+
       ]
     )
 
@@ -36,9 +43,12 @@ router.post('/wl', function (req: Request, res: Response) {
     req.body,
     [
       'name',
-      'about',
-      'whyU',
-      'experienceSup',
+      'date',
+      'idea',
+      'story',
+      'action',
+      'know',
+      'experience',
       'dc',
       'hex'
     ],

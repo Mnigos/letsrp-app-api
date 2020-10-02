@@ -2,7 +2,7 @@ export const requireObjectLength = (
   obj: any,
   keys: string[],
   expectedlength: number[]
-) => {
+): boolean => {
   let bool = true;
   try {
     keys.forEach((key, i) => {
@@ -18,7 +18,7 @@ export const checkingObjectRegexp = (
   obj: any,
   keys: string[],
   expectedRegexp: RegExp[]
-) => {
+): boolean => {
   let bool = true;
   try {
     keys.forEach((key, i) => {
@@ -34,4 +34,4 @@ export const requireObjectKeysType = (
   obj: any,
   keys: string[],
   expectedType: string
-) => keys.every(key => typeof obj[key] === expectedType);
+): boolean => keys.every(key => typeof obj[key] === expectedType);

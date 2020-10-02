@@ -3,6 +3,11 @@ declare namespace Express {
     body: {
       name?: string;
       about?: string;
+      owner?: string;
+      members?: string;
+      type?: string;
+      headquarters?: string;
+      expects?: string;
       whyU?: string;
       date?: string;
       idea?: string;

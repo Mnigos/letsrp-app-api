@@ -35,3 +35,20 @@ Content-Type: application/json
   "dc": "MoneyIgos#2000",
   "hex": "110000100000638"
 }
+###
+POST /applications/firm HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "name": "ee",
+  "idea": "viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut",
+  "owner": "awjdiHkjwdijhw",
+  "expects": "viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut",
+  "old": 12,
+  "type": "viverra nibh cras pulvinar mattis nunc viverra nibh cras pulvinar mattis nunc",
+  "headquarters": "eeeeeeeeee",
+  "members": 1,
+  "dc": "MoneyIgos#2000",
+  "hex": "110000100000638"
+}

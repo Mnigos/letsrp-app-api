@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from './../../validation';
+import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from '../../validation';
 
 const router = Router();
 

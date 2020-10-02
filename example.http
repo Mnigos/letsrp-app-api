@@ -20,3 +20,18 @@ Content-Type: application/json
   "dc": "MoneyIgos#2000",
   "hex": "110000100000638"
 }
+###
+POST /applications/sup HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "name": "ee",
+  "about": "viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut",
+  "whyU": "viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut",
+  "experienceSup": "viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut",
+  "hoursPerDay": 4,
+  "old": 12,
+  "dc": "MoneyIgos#2000",
+  "hex": "110000100000638"
+}

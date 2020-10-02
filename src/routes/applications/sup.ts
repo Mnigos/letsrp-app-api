@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
-import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from './../../validation';
+import { requireObjectLength,  requireObjectKeysType, checkingObjectRegexp } from '../../validation';
 
 const router = Router();
 
-router.post('/support', function (req: Request, res: Response) {
+router.post('/sup', function (req: Request, res: Response) {
   const ValidationLength = requireObjectLength(
     req.body,
     [

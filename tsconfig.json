@@ -2,11 +2,10 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "sourceMap": true,
-    "esModuleInterop": true,
     "preserveConstEnums": true,
     "outDir": "dist",
     "typeRoots": ["./typings", "./node_modules/@types"],
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests"],
   "exclude": ["node_modules"]
 }

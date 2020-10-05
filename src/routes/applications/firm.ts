@@ -14,18 +14,18 @@ router.post('/firm', function (req: Request, res: Response) {
     [2, 20, 2, 20, 10, 5, 15]
   );
 
-  const validationRegexp = checkingObjectRegexp(
+  const validationRegexp: boolean = checkingObjectRegexp(
     req.body,
     ['dc'],
     [/.{1,}#[0-9]{4}|[0-9]{18}$/]
   );
 
-  const validationString = requireObjectKeysType(
+  const validationString: boolean = requireObjectKeysType(
     req.body,
     ['name', 'idea', 'owner', 'expects', 'type', 'headquarters', 'hex'],
     'string'
   );
-  const validationNumber = requireObjectKeysType(
+  const validationNumber: boolean = requireObjectKeysType(
     req.body,
     ['old', 'members'],
     'number'

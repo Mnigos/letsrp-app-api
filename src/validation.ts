@@ -33,5 +33,5 @@ export const checkingObjectRegexp = (
 export const requireObjectKeysType = (
   obj: any,
   keys: string[],
-  expectedType: string
+  expectedType: string = 'string'
 ): boolean => keys.every(key => typeof obj[key] === expectedType);

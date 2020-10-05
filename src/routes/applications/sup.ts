@@ -14,18 +14,22 @@ router.post('/sup', function (req: Request, res: Response) {
     [2, 20, 20, 20, 15]
   );
 
-  const validationRegexp = checkingObjectRegexp(
+  const validationRegexp: boolean = checkingObjectRegexp(
     req.body,
     ['dc'],
     [/.{1,}#[0-9]{4}|[0-9]{18}$/]
   );
 
-  const validationString = requireObjectKeysType(
+  const validationString: boolean = requireObjectKeysType(
     req.body,
     ['name', 'about', 'whyU', 'experienceSup', 'dc', 'hex'],
     'string'
   );
-  const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
+  const validationNumber: boolean = requireObjectKeysType(
+    req.body,
+    ['old'],
+    'number'
+  );
 
   if (
     !validationString ||

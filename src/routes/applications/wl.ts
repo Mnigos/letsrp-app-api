@@ -8,13 +8,13 @@ import {
 const router = Router();
 
 router.post('/wl', function (req: Request, res: Response) {
-  const ValidationLength = requireObjectLength(
+  const ValidationLength: boolean = requireObjectLength(
     req.body,
     ['name', 'idea', 'story', 'action', 'know', 'experience', 'hex'],
     [2, 20, 200, 50, 10, 10, 15]
   );
 
-  const validationRegexp = checkingObjectRegexp(
+  const validationRegexp: boolean = checkingObjectRegexp(
     req.body,
     ['date', 'dc'],
     [
@@ -23,7 +23,7 @@ router.post('/wl', function (req: Request, res: Response) {
     ]
   );
 
-  const validationString = requireObjectKeysType(
+  const validationString: boolean = requireObjectKeysType(
     req.body,
     [
       'name',
@@ -38,7 +38,11 @@ router.post('/wl', function (req: Request, res: Response) {
     ],
     'string'
   );
-  const validationNumber = requireObjectKeysType(req.body, ['old'], 'number');
+  const validationNumber: boolean = requireObjectKeysType(
+    req.body,
+    ['old'],
+    'number'
+  );
 
   if (
     !validationString ||

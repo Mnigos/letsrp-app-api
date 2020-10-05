@@ -1,5 +1,6 @@
-import express, { Application } from 'express';
-import bodyParser from 'body-parser';
+import * as express from 'express';
+import { Application } from 'express';
+import * as bodyParser from 'body-parser';
 import routes from './routes/index';
 import applicationRoute from './routes/applications/index';
 import applicationWlRoute from './routes/applications/wl';

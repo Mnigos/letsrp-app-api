@@ -27,7 +27,7 @@ router.post('/sup', function (req: Request, res: Response) {
   );
   const validationNumber: boolean = requireObjectKeysType(
     req.body,
-    ['old'],
+    ['old', 'hoursPerDay'],
     'number'
   );
 

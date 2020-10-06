@@ -6,10 +6,10 @@ export const requireObjectLength = (
   let bool = true;
   try {
     keys.forEach((key, i) => {
-      if (obj[key].length < expectedlength[i] || !obj[key]) bool = false;
+      if (!obj[key] || obj[key].length < expectedlength[i]) bool = false;
     });
   } catch (e) {
-    console.log(e);
+    console.log('error', e);
   }
   return bool;
 };
@@ -22,10 +22,10 @@ export const checkingObjectRegexp = (
   let bool = true;
   try {
     keys.forEach((key, i) => {
-      if (!expectedRegexp[i].test(obj[key] || !obj[key])) bool = false;
+      if (!obj[key] || !expectedRegexp[i].test(obj[key])) bool = false;
     });
   } catch (e) {
-    console.log(e);
+    console.log('error', e);
   }
   return bool;
 };

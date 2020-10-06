@@ -14,6 +14,8 @@ declare namespace Express {
       story?: string;
       action?: string;
       old?: number;
+      act?: string;
+      bring?: string;
       know?: string;
       experience?: string;
       experienceSup?: string;

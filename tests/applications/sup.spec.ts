@@ -1,6 +1,6 @@
 import request from 'supertest';
 import Chance from 'chance';
-import app from '../src/app';
+import app from '../../src/app';
 
 const chance = Chance();
 

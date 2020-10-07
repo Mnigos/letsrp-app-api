@@ -4,7 +4,7 @@ import app from '../../src/app';
 
 const chance = Chance();
 
-xdescribe('EMS form endpoint', () => {
+describe('EMS form endpoint', () => {
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/ems').expect(406);
     await request(app)
@@ -14,7 +14,7 @@ xdescribe('EMS form endpoint', () => {
         name: chance.age(),
         about: '01-01-2020',
         whyU: chance.word({ length: 10 }),
-        experienceSup: chance.word({ length: 200 }),
+        experience: chance.word({ length: 200 }),
         hoursPerDay: chance.word({ length: 50 }),
         old: chance.age(),
         dc: 'MoneyIgos#2000',

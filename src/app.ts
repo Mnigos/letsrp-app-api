@@ -5,7 +5,7 @@ import applicationRoute from './routes/applications/index';
 import applicationWlRoute from './routes/applications/wl';
 import applicationSupRoute from './routes/applications/sup';
 import applicationFirmRoute from './routes/applications/firm';
-import applicationEMSRoute from './routes/applications/esm';
+import applicationEMSRoute from './routes/applications/ems';
 
 const app: Application = express();
 

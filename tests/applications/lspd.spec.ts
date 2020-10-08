@@ -4,7 +4,7 @@ import app from '../../src/app';
 
 const chance = Chance();
 
-describe('LSCM form endpoint', () => {
+describe('LSPD form endpoint', () => {
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/lspd').expect(406);
     await request(app)

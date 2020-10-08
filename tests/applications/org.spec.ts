@@ -4,11 +4,11 @@ import app from '../../src/app';
 
 const chance = Chance();
 
-describe('Firm form endpoint', () => {
+describe('Org form endpoint', () => {
   it('Uploading form fails when something is not correct', async () => {
-    await request(app).post('/applications/firm').expect(406);
+    await request(app).post('/applications/org').expect(406);
     await request(app)
-      .post('/applications/firm')
+      .post('/applications/org')
       .set('Content-Type', 'application/json')
       .send({
         name: chance.age(),
@@ -25,7 +25,7 @@ describe('Firm form endpoint', () => {
 
   it('Uploading form accept when everything is correct', async () => {
     await request(app)
-      .post('/applications/firm')
+      .post('/applications/org')
       .set('Content-Type', 'application/json')
       .send({
         name: chance.name(),

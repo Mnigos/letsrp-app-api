@@ -7,6 +7,7 @@ import applicationSupRoute from './routes/applications/sup';
 import applicationFirmRoute from './routes/applications/firm';
 import applicationEMSRoute from './routes/applications/ems';
 import applicationLSCMRoute from './routes/applications/lscm';
+import applicationLSPDRoute from './routes/applications/lspd';
 
 const app: Application = express();
 
@@ -19,5 +20,6 @@ app.use('/applications', applicationSupRoute);
 app.use('/applications', applicationFirmRoute);
 app.use('/applications', applicationEMSRoute);
 app.use('/applications', applicationLSCMRoute);
+app.use('/applications', applicationLSPDRoute);
 
 export default app;

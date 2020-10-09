@@ -12,13 +12,13 @@ describe('Support form endpoint', () => {
       .set('Content-Type', 'application/json')
       .send({
         name: chance.age(),
-        about: '01-01-2020',
-        whyU: chance.word({ length: 10 }),
-        experienceSup: chance.word({ length: 200 }),
-        hoursPerDay: chance.word({ length: 50 }),
+        about: chance.word({ length: 50 }),
+        whyU: chance.word({ length: 30 }),
+        experienceSup: chance.word({ length: 50 }),
+        hoursPerDay: chance.natural({ min: 0, max: 24 }),
         old: chance.age(),
         dc: 'MoneyIgos#2000',
-        hex: chance.string({ length: 11 })
+        hex: chance.string({ length: 15 })
       })
       .expect(406);
   });

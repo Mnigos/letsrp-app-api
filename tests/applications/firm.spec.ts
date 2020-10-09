@@ -12,13 +12,15 @@ describe('Firm form endpoint', () => {
       .set('Content-Type', 'application/json')
       .send({
         name: chance.age(),
-        about: '01-01-2020',
-        whyU: chance.word({ length: 10 }),
-        experienceSup: chance.word({ length: 200 }),
-        hoursPerDay: chance.word({ length: 50 }),
+        idea: chance.word({ length: 50 }),
+        owner: chance.name(),
+        expects: chance.word({ length: 30 }),
         old: chance.age(),
+        type: chance.word({ length: 20 }),
+        headquarters: chance.word({ length: 20 }),
+        members: chance.natural({ min: 0, max: 100 }),
         dc: 'MoneyIgos#2000',
-        hex: chance.string({ length: 11 })
+        hex: chance.string({ length: 15 })
       })
       .expect(406);
   });

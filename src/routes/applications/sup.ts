@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.post('/sup', function (req: Request, res: Response) {
-  const ValidationLength = requireObjectLength(
+  const validationLength = requireObjectLength(
     req.body,
     ['name', 'about', 'whyU', 'experienceSup', 'hex'],
     [2, 20, 20, 20, 15]
@@ -34,7 +34,7 @@ router.post('/sup', function (req: Request, res: Response) {
   if (
     !validationString ||
     !validationNumber ||
-    !ValidationLength ||
+    !validationLength ||
     !validationRegexp
   ) {
     res.status(406).send({

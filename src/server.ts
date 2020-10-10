@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 import assert from 'assert';
 import app from './app';
-import './config/keysDev';
+
+const { mongoURI } = require('./config/keysDev');
 
 const port = 8080;
 
-['mongoURI'].forEach(variable => {
-  assert(process.env[variable], `process.env.${variable} is undefined`);
+['MONGO_URI'].forEach(variable => {
+  assert([variable], `${variable} is undefined!`);
 });
+mongoose.set('useFindAndModify', false);
 
 mongoose
-  .connect(process.env.mongoURI, {
+  .connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })

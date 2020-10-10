@@ -1,5 +1,5 @@
 declare namespace Express {
-  export interface Request {
+  export interface Forms {
     body: {
       name?: string;
       about?: string;

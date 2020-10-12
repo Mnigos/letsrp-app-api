@@ -8,7 +8,7 @@ import {
 const router = Router();
 
 router.post('/lspd', function (req: Request, res: Response) {
-  const ValidationLength: boolean = requireObjectLength(
+  const validationLength: boolean = requireObjectLength(
     req.body,
     ['name', 'act', 'bring', 'action', 'whyU', 'experience', 'hex'],
     [2, 20, 20, 30, 20, 20, 10, 15]
@@ -37,7 +37,7 @@ router.post('/lspd', function (req: Request, res: Response) {
   if (
     !validationString ||
     !validationNumber ||
-    !ValidationLength ||
+    !validationLength ||
     !validationRegexp
   ) {
     res.status(406).send({

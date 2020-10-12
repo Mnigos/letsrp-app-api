@@ -8,9 +8,18 @@ import {
 const router = Router();
 
 router.post('/org', function (req: Request, res: Response) {
-  const ValidationLength = requireObjectLength(
+  const validationLength = requireObjectLength(
     req.body,
-    ['name', 'idea','story', 'owner', 'expects', 'type', 'headquarters', 'hex'],
+    [
+      'name',
+      'idea',
+      'story',
+      'owner',
+      'expects',
+      'type',
+      'headquarters',
+      'hex'
+    ],
     [2, 20, 100, 2, 20, 10, 5, 15]
   );
 
@@ -34,7 +43,7 @@ router.post('/org', function (req: Request, res: Response) {
   if (
     !validationString ||
     !validationNumber ||
-    !ValidationLength ||
+    !validationLength ||
     !validationRegexp
   ) {
     res.status(406).send({

@@ -2,6 +2,7 @@ declare namespace Express {
   export interface Forms {
     body: {
       name?: string;
+      pass?: string;
       about?: string;
       owner?: string;
       members?: string;

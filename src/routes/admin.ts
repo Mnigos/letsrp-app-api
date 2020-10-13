@@ -1,17 +1,15 @@
 import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../model/user';
-import {
-  requireObjectKeysType
-} from '../validation';
+import { requireObjectKeysType } from '../validation';
 
 const router = Router();
 
 router.post('/admin', async (req: Request, res: Response) => {
   if (!requireObjectKeysType(req.body, ['name', 'pass'], 'string'))
-  return res
-    .status(400)
-    .send({ e: 'both name and pass are required in body' });
+    return res
+      .status(400)
+      .send({ e: 'both name and pass are required in body' });
 
   const { name, pass } = req.body;
 
@@ -19,13 +17,13 @@ router.post('/admin', async (req: Request, res: Response) => {
 
   if (foundedUser === null) {
     return res.status(400).send({
-      e: 'userNotFound',
+      e: 'userNotFound'
     });
   }
 
   if (foundedUser.pass !== pass) {
     return res.status(401).send({
-      e: 'passwordIncorrect',
+      e: 'passwordIncorrect'
     });
   }
 

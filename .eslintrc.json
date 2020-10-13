@@ -31,6 +31,7 @@
         "no-unused-vars": "warn",
         "no-console": "off",
         "func-names": "off",
+        "consistent-return": "warn",
         "import/extensions": [
             "error",
             "ignorePackages",

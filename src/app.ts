@@ -1,7 +1,8 @@
 import express, { Application } from 'express';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
-import adminRoute from './routes/admin';
+// import adminRoute from './routes/admin';
+import loginAuth from './auth';
 
 import applicationRoute from './routes/applications/index';
 import applicationWlRoute from './routes/applications/wl';
@@ -16,7 +17,8 @@ const app: Application = express();
 
 app.use(bodyParser.json());
 app.use(routes);
-app.use(adminRoute);
+app.use(loginAuth);
+// app.use(adminRoute);
 
 app.use('/applications', applicationRoute);
 app.use('/applications', applicationWlRoute);

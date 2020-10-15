@@ -58,6 +58,6 @@ Host: localhost:8080
 Content-Type: application/json
 
 {
-  "name": "e",
-  "pass": "e"
+  "name": "Jack",
+  "pass": "zaq"
 }

@@ -9,9 +9,9 @@ describe('Login system', () => {
   });
 
   it("Login fails when user data isn't provided or incomplete", async () => {
-    await request(app).post('/admin').expect(400);
+    await request(app).post('/auth/admin').expect(400);
     await request(app)
-      .post('/admin')
+      .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
         user: {
@@ -25,18 +25,20 @@ describe('Login system', () => {
     mockingoose(User).toReturn(
       {
         name: 'John',
-        pass: 'fly'
+        pass: 'fly',
+        perms: 'admin'
       },
       'findOne'
     );
 
     await request(app)
-      .post('/admin')
+      .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
         user: {
           name: 'John',
-          pass: 'zaq1@WSX'
+          pass: 'zaq1@WSX',
+          perms: 'admin'
         }
       })
       .expect(401);

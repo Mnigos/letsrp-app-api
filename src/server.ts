@@ -19,13 +19,6 @@ mongoose
   })
   .then(() => {
     console.log('Mongoose is connected');
-    User.insertMany([
-      {
-        name: 'Jack',
-        pass: 'zaq1@WSX',
-        perms: 'admin'
-      }
-    ]);
     app.listen(port, () => {
       console.log(`Listening on ${port}`);
     });

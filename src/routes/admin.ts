@@ -1,35 +1,20 @@
 import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../model/user';
-import { requireObjectKeysType } from '../validation';
 
 const router = Router();
 
-router.post('/admin', async (req: Request, res: Response) => {
-  if (!requireObjectKeysType(req.body, ['name', 'pass'], 'string'))
-    return res
-      .status(400)
-      .send({ e: 'both name and pass are required in body' });
+router.post('/admin', (req: Request, res: Response) => {
+  const verify = jwt.verify(req.body?.token, 'privateKey');
 
-  const { name, pass } = req.body;
-
-  const foundedUser = await User.findOne({ name });
-
-  if (foundedUser === null) {
-    return res.status(400).send({
-      e: 'userNotFound'
+  if (verify) {
+    res.status(200).send({
+      accepted: verify
     });
-  }
-
-  if (foundedUser.pass !== pass) {
+  } else {
     return res.status(401).send({
-      e: 'passwordIncorrect'
+      e: 'Token denied'
     });
   }
-
-  const token = jwt.sign({ user: foundedUser.name }, 'privateKey');
-
-  res.send({ token });
 });
 
 export default router;

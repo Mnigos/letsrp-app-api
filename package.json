@@ -18,7 +18,9 @@
     "chance": "^1.1.7",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.9"
+    "mongoose": "^5.10.9",
+    "passport": "^0.4.1",
+    "passport-http-bearer": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -29,6 +31,8 @@
     "@types/jest": "^26.0.14",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.10.3",
+    "@types/passport": "^1.0.4",
+    "@types/passport-http-bearer": "^1.0.36",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",

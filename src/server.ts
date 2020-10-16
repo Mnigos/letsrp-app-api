@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import assert from 'assert';
+import User from './model/user';
 import app from './app';
 
 const { mongoURI } = require('./config/keysDev');

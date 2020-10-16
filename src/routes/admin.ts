@@ -5,7 +5,7 @@ const router = Router();
 
 router.get(
   '/admin',
-  passport.authenticate('bearer', { session: false }),
+  passport.authenticate('bearer', { session: true }),
   (req: Request, res: Response) => {
     res.status(200).send({
       message: 'Success',

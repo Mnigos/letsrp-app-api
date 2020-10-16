@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../src/app';
 import User from '../src/model/user';
 
-describe('Login system', () => {
+xdescribe('Login system', () => {
   beforeEach(() => {
     mockingoose.resetAll();
   });

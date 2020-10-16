@@ -1,15 +1,20 @@
 import { Request, Response, Router } from 'express';
-import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
-router.get(
-  '/admin',
-  passport.authenticate('bearer', { session: true }),
-  (req: Request, res: Response) => {
+router.post('/admin', (req: Request, res: Response) => {
+  const verify = jwt.verify(req.body?.token, 'privateKey');
+
+  if (verify) {
     res.status(200).send({
-      message: 'Success',
-      status: res.statusCode
+      accepted: verify
+    });
+  } else {
+    return res.status(401).send({
+      e: 'Token denied'
     });
   }
-);
+});
+
+export default router;

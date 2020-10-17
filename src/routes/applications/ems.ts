@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import EmsForm from '../../model/emsForm';
 import {
   requireObjectLength,
   requireObjectKeysType,
@@ -8,6 +9,20 @@ import {
 const router = Router();
 
 router.post('/ems', function (req: Request, res: Response) {
+  const {
+    name,
+    date,
+    act,
+    bring,
+    action,
+    whyU,
+    hoursPerDay,
+    old,
+    experience,
+    dc,
+    hex
+  } = req.body;
+
   const validationLength: boolean = requireObjectLength(
     req.body,
     ['name', 'act', 'bring', 'action', 'whyU', 'experience', 'hex'],
@@ -45,10 +60,32 @@ router.post('/ems', function (req: Request, res: Response) {
       status: res.statusCode
     });
   } else {
-    res.status(202).send({
-      message: 'Accepted',
-      status: res.statusCode
-    });
+    new EmsForm({
+      name,
+      date,
+      act,
+      bring,
+      action,
+      whyU,
+      hoursPerDay,
+      old,
+      experience,
+      dc,
+      hex,
+      formType: 'wl',
+      status: 'awaiting'
+    })
+      .save()
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
   }
 });
 

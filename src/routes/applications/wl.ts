@@ -9,6 +9,19 @@ import {
 const router = Router();
 
 router.post('/wl', function (req: Request, res: Response) {
+  const {
+    name,
+    date,
+    idea,
+    story,
+    action,
+    old,
+    know,
+    experience,
+    dc,
+    hex
+  } = req.body;
+
   const validationLength: boolean = requireObjectLength(
     req.body,
     ['name', 'idea', 'story', 'action', 'know', 'experience', 'hex'],
@@ -56,16 +69,16 @@ router.post('/wl', function (req: Request, res: Response) {
     });
   } else {
     new WlForm({
-      name: req.body?.name,
-      date: req.body?.date,
-      idea: req.body?.idea,
-      story: req.body?.story,
-      action: req.body?.action,
-      old: req.body?.old,
-      know: req.body?.know,
-      experience: req.body?.experience,
-      dc: req.body?.dc,
-      hex: req.body?.hex,
+      name,
+      date,
+      idea,
+      story,
+      action,
+      old,
+      know,
+      experience,
+      dc,
+      hex,
       formType: 'wl',
       status: 'awaiting'
     })

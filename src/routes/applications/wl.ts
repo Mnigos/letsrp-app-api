@@ -55,6 +55,9 @@ router.post('/wl', function (req: Request, res: Response) {
       message: 'Validation failed'
     });
   } else {
+    // res.status(202).send({
+    //   message: 'Accepted'
+    // });
     new WlForm({
       name: req.body?.name,
       date: req.body?.date,
@@ -68,17 +71,18 @@ router.post('/wl', function (req: Request, res: Response) {
       hex: req.body?.hex,
       formType: 'wl',
       status: 'awaiting'
-    }).save(e => {
-      if (e) {
-        res.status(424).send({
-          error: e
-        });
-      } else {
+    })
+      .save()
+      .then(() => {
         res.status(201).send({
           message: 'Created'
         });
-      }
-    });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
   }
 });
 

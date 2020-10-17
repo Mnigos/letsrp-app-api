@@ -52,7 +52,7 @@ router.post('/wl', function (req: Request, res: Response) {
     !validationRegexp
   ) {
     res.status(406).send({
-      message: 'Validation failed'
+      error: 'Validation failed'
     });
   } else {
     new WlForm({

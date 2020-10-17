@@ -9,12 +9,14 @@ router.post('/wl', (req: Request, res: Response) => {
     jwt.verify(req.body?.token, 'privateKey');
   } catch (e) {
     res.status(401).send({
-      e: 'Token denied'
+      error: 'Invalid token'
     });
   }
   wlForm.find({ formType: 'wl' }, (e, form) => {
     if (e) {
-      console.log(e);
+      res.status(500).send({
+        error: 'Cannot get this from database'
+      });
     } else {
       res.status(200).send({
         form

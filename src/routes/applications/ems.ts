@@ -41,7 +41,7 @@ router.post('/ems', function (req: Request, res: Response) {
     !validationRegexp
   ) {
     res.status(406).send({
-      message: 'Validation failed',
+      error: 'Validation failed',
       status: res.statusCode
     });
   } else {

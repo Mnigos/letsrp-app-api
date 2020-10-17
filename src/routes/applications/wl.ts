@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import WlForm from '../../model/wlForm';
 import {
   requireObjectLength,
   requireObjectKeysType,
@@ -51,13 +52,32 @@ router.post('/wl', function (req: Request, res: Response) {
     !validationRegexp
   ) {
     res.status(406).send({
-      message: 'Validation failed',
-      status: res.statusCode
+      message: 'Validation failed'
     });
   } else {
-    res.status(202).send({
-      message: 'Accepted',
-      status: res.statusCode
+    new WlForm({
+      name: req.body?.name,
+      date: req.body?.date,
+      idea: req.body?.idea,
+      story: req.body?.story,
+      action: req.body?.action,
+      old: req.body?.old,
+      know: req.body?.know,
+      experience: req.body?.experience,
+      dc: req.body?.dc,
+      hex: req.body?.hex,
+      formType: 'wl',
+      status: 'awaiting'
+    }).save(e => {
+      if (e) {
+        res.status(424).send({
+          error: e
+        });
+      } else {
+        res.status(201).send({
+          message: 'Created'
+        });
+      }
     });
   }
 });

@@ -12,9 +12,10 @@ export interface IWl extends Document {
   dc: string;
   hex: string;
   formType: string;
+  status: string;
 }
 
-const wlSchema = new Schema({
+const WlSchema = new Schema({
   name: String,
   date: String,
   idea: String,
@@ -25,9 +26,10 @@ const wlSchema = new Schema({
   experience: String,
   dc: String,
   hex: String,
-  formType: String
+  formType: String,
+  status: String
 });
 
-const User = model<IWl>('WlForm', wlSchema);
+const User = model<IWl>('WlForm', WlSchema);
 
 export default User;

@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import SupForm from '../../model/supForm';
 import {
   requireObjectLength,
   requireObjectKeysType,
@@ -8,6 +9,17 @@ import {
 const router = Router();
 
 router.post('/sup', function (req: Request, res: Response) {
+  const {
+    name,
+    about,
+    whyU,
+    hoursPerDay,
+    old,
+    experienceSup,
+    dc,
+    hex
+  } = req.body;
+
   const validationLength = requireObjectLength(
     req.body,
     ['name', 'about', 'whyU', 'experienceSup', 'hex'],
@@ -42,10 +54,29 @@ router.post('/sup', function (req: Request, res: Response) {
       status: res.statusCode
     });
   } else {
-    res.status(202).send({
-      message: 'Accepted',
-      status: res.statusCode
-    });
+    new SupForm({
+      name,
+      about,
+      whyU,
+      hoursPerDay,
+      old,
+      experienceSup,
+      dc,
+      hex,
+      formType: 'wl',
+      status: 'awaiting'
+    })
+      .save()
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
   }
 });
 

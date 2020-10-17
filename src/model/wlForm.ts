@@ -30,6 +30,6 @@ const WlSchema = new Schema({
   status: String
 });
 
-const User = model<IWl>('WlForm', WlSchema);
+const WlForm = model<IWl>('WlForm', WlSchema);
 
-export default User;
+export default WlForm;

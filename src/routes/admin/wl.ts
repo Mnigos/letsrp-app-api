@@ -13,7 +13,7 @@ router.post('/wl', (req: Request, res: Response) => {
         console.log(e);
       } else {
         res.status(200).send({
-          name: form.name
+          form
         });
       }
     });

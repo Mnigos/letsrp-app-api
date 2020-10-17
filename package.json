@@ -1,7 +1,7 @@
 {
   "name": "express-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rest API for Let's RP Application",
   "main": "src/server.ts",
   "scripts": {
     "serve": "nodemon",
@@ -11,7 +11,7 @@
     "test": "jest",
     "collect-coverage": "jest --coverage"
   },
-  "author": "",
+  "author": "MoneyIgos",
   "license": "ISC",
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.0",

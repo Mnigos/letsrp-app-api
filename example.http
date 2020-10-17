@@ -62,7 +62,7 @@ Content-Type: application/json
   "pass": "zaq1@WSX"
 }
 ###
-POST /admin HTTP/1.1
+POST /admin/wl HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
 

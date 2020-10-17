@@ -9,7 +9,7 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
   if (!requireObjectKeysType(req.body, ['name', 'pass'], 'string'))
     return res
       .status(400)
-      .send({ e: 'both name and pass are required in body' });
+      .send({ error: 'both name and pass are required in body' });
 
   const { name, pass } = req.body;
 

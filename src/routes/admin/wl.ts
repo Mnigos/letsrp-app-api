@@ -5,23 +5,22 @@ import wlForm from '../../model/wlForm';
 const router = Router();
 
 router.post('/wl', (req: Request, res: Response) => {
-  const verify = jwt.verify(req.body?.token, 'privateKey');
-
-  if (verify) {
-    wlForm.find({ formType: 'wl' }, (e, form) => {
-      if (e) {
-        console.log(e);
-      } else {
-        res.status(200).send({
-          form
-        });
-      }
-    });
-  } else {
-    return res.status(401).send({
+  try {
+    jwt.verify(req.body?.token, 'privateKey');
+  } catch (e) {
+    res.status(401).send({
       e: 'Token denied'
     });
   }
+  wlForm.find({ formType: 'wl' }, (e, form) => {
+    if (e) {
+      console.log(e);
+    } else {
+      res.status(200).send({
+        form
+      });
+    }
+  });
 });
 
 export default router;

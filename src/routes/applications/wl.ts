@@ -55,9 +55,6 @@ router.post('/wl', function (req: Request, res: Response) {
       message: 'Validation failed'
     });
   } else {
-    // res.status(202).send({
-    //   message: 'Accepted'
-    // });
     new WlForm({
       name: req.body?.name,
       date: req.body?.date,

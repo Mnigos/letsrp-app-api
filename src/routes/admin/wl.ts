@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 const router = Router();
 
-router.post('/admin', (req: Request, res: Response) => {
+router.post('/wl', (req: Request, res: Response) => {
   const verify = jwt.verify(req.body?.token, 'privateKey');
 
   if (verify) {

@@ -53,7 +53,7 @@ describe('Login system', () => {
       'findOne'
     );
 
-    const response = request(app)
+    request(app)
       .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
@@ -63,9 +63,4 @@ describe('Login system', () => {
         }
       })
       .expect(200);
-
-    // expect(response.body?.token).toMatch(
-    //   /^([a-zA-Z0-9-_.]+\.){2}[a-zA-Z0-9-_.]+$/i
-    // );
-  });
 });

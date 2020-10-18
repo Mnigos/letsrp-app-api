@@ -78,7 +78,7 @@ router.post('/org', function (req: Request, res: Response) {
       members,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'org',
       status: 'awaiting'
     })
       .save()

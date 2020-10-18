@@ -67,7 +67,7 @@ router.post('/firm', function (req: Request, res: Response) {
       members,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'firm',
       status: 'awaiting'
     })
       .save()

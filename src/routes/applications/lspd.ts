@@ -72,7 +72,7 @@ router.post('/lspd', function (req: Request, res: Response) {
       experience,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'lspd',
       status: 'awaiting'
     })
       .save()

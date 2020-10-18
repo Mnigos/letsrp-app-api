@@ -72,7 +72,7 @@ router.post('/ems', function (req: Request, res: Response) {
       experience,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'ems',
       status: 'awaiting'
     })
       .save()

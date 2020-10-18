@@ -70,7 +70,7 @@ Content-Type: application/json
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiSmFjayIsImlhdCI6MTYwMjg4MjAwOH0.95EFq-wglXsYIbK0dhbqNP6dbS4lR7wjxASd2jLk4Zg"
 }
 ### Invalid token
-POST /admin/wl HTTP/1.1
+POST /admin/sup HTTP/1.1
 Host: localhost:8080
 Content-Type: application/json
 

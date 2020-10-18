@@ -63,7 +63,7 @@ router.post('/sup', function (req: Request, res: Response) {
       experienceSup,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'sup',
       status: 'awaiting'
     })
       .save()

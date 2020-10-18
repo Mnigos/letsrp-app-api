@@ -72,7 +72,7 @@ router.post('/lscm', function (req: Request, res: Response) {
       experience,
       dc,
       hex,
-      formType: 'wl',
+      formType: 'lscm',
       status: 'awaiting'
     })
       .save()

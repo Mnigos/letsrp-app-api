@@ -1,10 +1,10 @@
 import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
-import wlForm from '../../model/wlForm';
+import SupForm from '../../model/supForm';
 
 const router = Router();
 
-router.post('/wl', (req: Request, res: Response) => {
+router.post('/sup', (req: Request, res: Response) => {
   try {
     jwt.verify(req.body?.token, 'privateKey');
   } catch (e) {
@@ -12,7 +12,7 @@ router.post('/wl', (req: Request, res: Response) => {
       error: 'Invalid token'
     });
   }
-  wlForm.find({ formType: 'wl' }, (e, form) => {
+  SupForm.find({ formType: 'sup' }, (e, form) => {
     if (e) {
       res.status(500).send({
         error: 'Cannot get this from database'

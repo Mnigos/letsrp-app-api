@@ -39,6 +39,10 @@
               "ts": "never",
               "tsx": "never"
             }
+        ],
+        "valid-typeof": [
+            "error",
+            { "requireStringLiterals": false }
         ]
     },
     "overrides": [

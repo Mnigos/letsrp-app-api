@@ -32,6 +32,10 @@
         "no-console": "off",
         "func-names": "off",
         "consistent-return": "off",
+        "import/no-unresolved": [
+            2,
+            { "caseSensitive": false }
+        ],
         "import/extensions": [
             "error",
             "ignorePackages",

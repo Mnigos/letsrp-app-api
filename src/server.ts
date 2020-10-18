@@ -6,7 +6,7 @@ const { mongoURI } = require('./config/keysDev');
 
 const port = 8080;
 
-['MONGO_URI'].forEach(variable => {
+['MongoURI'].forEach(variable => {
   assert([variable], `${variable} is undefined!`);
 });
 mongoose.set('useFindAndModify', false);

@@ -4,7 +4,7 @@ import app from '../../src/app';
 
 describe('Login system', () => {
   it('Authorization failed when token is invalid', async () => {
-    await request(app).post('/admin/wl').expect(401);
+    await request(app).post('/admin/org').expect(401);
   });
 
   it('Gets array of forms when token is valid', async () => {
@@ -12,7 +12,7 @@ describe('Login system', () => {
     const token = jwt.sign({ user }, 'privateKey');
 
     await request(app)
-      .post('/admin/wl')
+      .post('/admin/org')
       .set('Content-Type', 'application/json')
       .send({
         token

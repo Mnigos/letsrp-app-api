@@ -25,8 +25,8 @@ describe('Whitelist form endpoint', () => {
       .expect(406);
   });
 
-  it('Uploading form accept when everything is correct', () => {
-    request(app)
+  it('Uploading form accept when everything is correct', async () => {
+    await request(app)
       .post('/applications/wl')
       .set('Content-Type', 'application/json')
       .send({
@@ -41,6 +41,6 @@ describe('Whitelist form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(201);
+      .expect(200);
   });
 });

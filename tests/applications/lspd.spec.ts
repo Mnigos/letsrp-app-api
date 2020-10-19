@@ -26,8 +26,8 @@ describe('LSPD form endpoint', () => {
       .expect(406);
   });
 
-  it('Uploading form accept when everything is correct', () => {
-    request(app)
+  it('Uploading form accept when everything is correct', async () => {
+    await request(app)
       .post('/applications/lspd')
       .set('Content-Type', 'application/json')
       .send({

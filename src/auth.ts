@@ -12,6 +12,7 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
       .send({ error: 'both name and pass are required in body' });
 
   const { name, pass } = req.body;
+  console.error(name);
 
   const foundedUser = await User.findOne({ name });
 

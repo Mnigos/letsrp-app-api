@@ -14,14 +14,12 @@ describe('Login system', () => {
       .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
-        user: {
-          name: 'John'
-        }
+        name: 'John'
       })
       .expect(400);
   });
 
-  it('login fails when user password is incorrect', () => {
+  it('login fails when user password is incorrect', async () => {
     mockingoose(User).toReturn(
       {
         name: 'John',
@@ -31,36 +29,36 @@ describe('Login system', () => {
       'findOne'
     );
 
-    request(app)
+    await request(app)
       .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
-        user: {
-          name: 'John',
-          pass: 'zaq1@WSX',
-          perms: 'admin'
-        }
+        name: 'John',
+        pass: 'zaq1@WSX',
+        perms: 'admin'
       })
       .expect(401);
   });
 
-  it('login is succesfull when correct data is provided', () => {
+  it('login is succesfull when correct data is provided', async () => {
     mockingoose(User).toReturn(
       {
         name: 'John',
-        pass: 'zaq1@WSX'
+        pass: 'zaq1@WSX',
+        perms: 'admin'
       },
       'findOne'
     );
 
-    request(app)
+    const res = await request(app)
       .post('/auth/admin')
       .set('Content-Type', 'application/json')
       .send({
-        user: {
-          name: 'John',
-          pass: 'zaq1@WSX'
-        }
+        name: 'John',
+        pass: 'zaq1@WSX'
       })
       .expect(200);
+
+    expect(res.body?.token).toMatch(/^([a-zA-Z0-9-_.]+\.){2}[a-zA-Z0-9-_.]+$/i);
+  });
 });

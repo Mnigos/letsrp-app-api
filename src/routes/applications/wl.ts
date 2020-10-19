@@ -64,36 +64,35 @@ router.post('/wl', function (req: Request, res: Response) {
     !validationLength ||
     !validationRegexp
   ) {
-    res.status(406).send({
+    return res.status(406).send({
       error: 'Validation failed'
     });
-  } else {
-    new WlForm({
-      name,
-      date,
-      idea,
-      story,
-      action,
-      old,
-      know,
-      experience,
-      dc,
-      hex,
-      formType: 'wl',
-      status: 'awaiting'
-    })
-      .save()
-      .then(() => {
-        res.status(201).send({
-          message: 'Created'
-        });
-      })
-      .catch(() => {
-        res.status(500).send({
-          error: 'Cannot save to database'
-        });
-      });
   }
+  new WlForm({
+    name,
+    date,
+    idea,
+    story,
+    action,
+    old,
+    know,
+    experience,
+    dc,
+    hex,
+    formType: 'wl',
+    status: 'awaiting'
+  })
+    .save()
+    .then(() => {
+      res.status(201).send({
+        message: 'Created'
+      });
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: 'Cannot save to database'
+      });
+    });
 });
 
 export default router;

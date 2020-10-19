@@ -12,6 +12,7 @@ router.post('/ems', (req: Request, res: Response) => {
       error: 'Invalid token'
     });
   }
+
   EmsForm.find({ formType: 'ems' }, (e, form) => {
     if (e) {
       res.status(500).send({

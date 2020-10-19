@@ -53,31 +53,30 @@ router.post('/sup', function (req: Request, res: Response) {
       error: 'Validation failed',
       status: res.statusCode
     });
-  } else {
-    new SupForm({
-      name,
-      about,
-      whyU,
-      hoursPerDay,
-      old,
-      experienceSup,
-      dc,
-      hex,
-      formType: 'sup',
-      status: 'awaiting'
-    })
-      .save()
-      .then(() => {
-        res.status(201).send({
-          message: 'Created'
-        });
-      })
-      .catch(() => {
-        res.status(500).send({
-          error: 'Cannot save to database'
-        });
-      });
   }
+  new SupForm({
+    name,
+    about,
+    whyU,
+    hoursPerDay,
+    old,
+    experienceSup,
+    dc,
+    hex,
+    formType: 'sup',
+    status: 'awaiting'
+  })
+    .save()
+    .then(() => {
+      res.status(201).send({
+        message: 'Created'
+      });
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: 'Cannot save to database'
+      });
+    });
 });
 
 export default router;

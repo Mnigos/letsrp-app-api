@@ -59,34 +59,33 @@ router.post('/lspd', function (req: Request, res: Response) {
       error: 'Validation failed',
       status: res.statusCode
     });
-  } else {
-    new LspdForm({
-      name,
-      date,
-      act,
-      bring,
-      action,
-      whyU,
-      hoursPerDay,
-      old,
-      experience,
-      dc,
-      hex,
-      formType: 'lspd',
-      status: 'awaiting'
-    })
-      .save()
-      .then(() => {
-        res.status(201).send({
-          message: 'Created'
-        });
-      })
-      .catch(() => {
-        res.status(500).send({
-          error: 'Cannot save to database'
-        });
-      });
   }
+  new LspdForm({
+    name,
+    date,
+    act,
+    bring,
+    action,
+    whyU,
+    hoursPerDay,
+    old,
+    experience,
+    dc,
+    hex,
+    formType: 'lspd',
+    status: 'awaiting'
+  })
+    .save()
+    .then(() => {
+      res.status(201).send({
+        message: 'Created'
+      });
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: 'Cannot save to database'
+      });
+    });
 });
 
 export default router;

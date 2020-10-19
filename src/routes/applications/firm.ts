@@ -55,33 +55,32 @@ router.post('/firm', function (req: Request, res: Response) {
       error: 'Validation failed',
       status: res.statusCode
     });
-  } else {
-    new FirmForm({
-      name,
-      idea,
-      owner,
-      expects,
-      old,
-      type,
-      headquarters,
-      members,
-      dc,
-      hex,
-      formType: 'firm',
-      status: 'awaiting'
-    })
-      .save()
-      .then(() => {
-        res.status(201).send({
-          message: 'Created'
-        });
-      })
-      .catch(() => {
-        res.status(500).send({
-          error: 'Cannot save to database'
-        });
-      });
   }
+  new FirmForm({
+    name,
+    idea,
+    owner,
+    expects,
+    old,
+    type,
+    headquarters,
+    members,
+    dc,
+    hex,
+    formType: 'firm',
+    status: 'awaiting'
+  })
+    .save()
+    .then(() => {
+      res.status(201).send({
+        message: 'Created'
+      });
+    })
+    .catch(() => {
+      res.status(500).send({
+        error: 'Cannot save to database'
+      });
+    });
 });
 
 export default router;

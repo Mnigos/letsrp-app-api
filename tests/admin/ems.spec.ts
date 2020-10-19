@@ -4,7 +4,7 @@ import app from '../../src/app';
 
 describe('Login system', () => {
   it('Authorization failed when token is invalid', async () => {
-    await request(app).post('/admin/esm').expect(401);
+    await request(app).post('/admin/ems').expect(401);
   });
 
   it('Gets array of forms when token is valid', async () => {

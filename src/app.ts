@@ -14,6 +14,11 @@ import applicationOrgRoute from './routes/applications/org';
 
 import adminWlRoute from './routes/admin/wl';
 import adminSupRoute from './routes/admin/sup';
+import adminFirmRoute from './routes/admin/firm';
+import adminOrgRoute from './routes/admin/org';
+import adminEMSRoute from './routes/admin/ems';
+import adminLSPDRoute from './routes/admin/lspd';
+import adminLSCMRoute from './routes/admin/lscm';
 
 const app: Application = express();
 
@@ -32,5 +37,10 @@ app.use('/applications', applicationOrgRoute);
 
 app.use('/admin', adminWlRoute);
 app.use('/admin', adminSupRoute);
+app.use('/admin', adminFirmRoute);
+app.use('/admin', adminOrgRoute);
+app.use('/admin', adminEMSRoute);
+app.use('/admin', adminLSPDRoute);
+app.use('/admin', adminLSCMRoute);
 
 export default app;

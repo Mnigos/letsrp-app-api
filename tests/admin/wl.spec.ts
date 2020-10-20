@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
 import WlForm from '../../src/model/wlForm';
-import mockingoose from 'mockingoose';
 
-xdescribe('Login system', () => {
+describe('Login system', () => {
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/wl').expect(401);
   });

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import mockingoose from 'mockingoose';
 import app from '../../src/app';
-import OrgForm from '../../src/model/OrgForm';
+import OrgForm from '../../src/model/orgForm';
 
 describe('Login system', () => {
   it('Authorization failed when token is invalid', async () => {

@@ -2,7 +2,7 @@ import request from 'supertest';
 import Chance from 'chance';
 import mockingoose from 'mockingoose';
 import app from '../../src/app';
-import LspdForm from '../../src/model/lspdform';
+import LspdForm from '../../src/model/lspdForm';
 
 const chance = Chance();
 

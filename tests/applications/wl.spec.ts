@@ -2,7 +2,7 @@ import request from 'supertest';
 import Chance from 'chance';
 import mockingoose from 'mockingoose';
 import app from '../../src/app';
-import WlForm from '../../src/model/wlform';
+import WlForm from '../../src/model/wlForm';
 
 const chance = Chance();
 

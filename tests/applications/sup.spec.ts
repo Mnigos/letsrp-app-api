@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import SupForm from '../../src/model/supform';
 
 const chance = Chance();
 
@@ -24,6 +26,8 @@ describe('Support form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(SupForm).toReturn({});
+
     await request(app)
       .post('/applications/sup')
       .set('Content-Type', 'application/json')
@@ -37,6 +41,6 @@ describe('Support form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(202);
+      .expect(201);
   });
 });

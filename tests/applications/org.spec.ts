@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import OrgForm from '../../src/model/orgform';
 
 const chance = Chance();
 
@@ -27,6 +29,8 @@ describe('Org form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(OrgForm).toReturn({});
+
     await request(app)
       .post('/applications/org')
       .set('Content-Type', 'application/json')
@@ -43,6 +47,6 @@ describe('Org form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(202);
+      .expect(201);
   });
 });

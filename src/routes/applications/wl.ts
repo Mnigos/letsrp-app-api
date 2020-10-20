@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.post('/wl', function (req: Request, res: Response) {
+router.post('/wl', (req: Request, res: Response) => {
   const {
     name,
     date,

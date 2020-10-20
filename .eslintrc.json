@@ -24,7 +24,8 @@
             "extensions": [".ts"]
           }
         }
-      },
+    },
+    "ignorePatterns": ["dist/*"],
     "rules": {
         "prettier/prettier": "error",
         "prefer-const": "warn",
@@ -45,13 +46,5 @@
             "error",
             { "requireStringLiterals": false }
         ]
-    },
-    "overrides": [
-        {
-        "files": ["dist/*"],
-            "rules": {
-                "require-jsdoc": "off"
-            }
-        }
-    ]
+    }
 }

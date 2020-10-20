@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import LscmForm from '../../src/model/lscmform';
 
 const chance = Chance();
 
@@ -24,6 +26,8 @@ describe('LSCM form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(LscmForm).toReturn({});
+
     await request(app)
       .post('/applications/lscm')
       .set('Content-Type', 'application/json')
@@ -40,6 +44,6 @@ describe('LSCM form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(202);
+      .expect(201);
   });
 });

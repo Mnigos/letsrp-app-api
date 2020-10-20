@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import EmsForm from '../../src/model/emsform';
 
 const chance = Chance();
 
@@ -27,6 +29,8 @@ describe('EMS form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(EmsForm).toReturn({});
+
     await request(app)
       .post('/applications/ems')
       .set('Content-Type', 'application/json')
@@ -43,6 +47,6 @@ describe('EMS form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(202);
+      .expect(201);
   });
 });

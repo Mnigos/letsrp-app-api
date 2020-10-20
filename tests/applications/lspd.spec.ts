@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import LspdForm from '../../src/model/lspdform';
 
 const chance = Chance();
 
@@ -27,6 +29,8 @@ describe('LSPD form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(LspdForm).toReturn({});
+
     await request(app)
       .post('/applications/lspd')
       .set('Content-Type', 'application/json')
@@ -43,6 +47,6 @@ describe('LSPD form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(202);
+      .expect(201);
   });
 });

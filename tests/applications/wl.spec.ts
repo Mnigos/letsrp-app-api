@@ -1,6 +1,8 @@
 import request from 'supertest';
 import Chance from 'chance';
+import mockingoose from 'mockingoose';
 import app from '../../src/app';
+import WlForm from '../../src/model/wlform';
 
 const chance = Chance();
 
@@ -26,6 +28,8 @@ describe('Whitelist form endpoint', () => {
   });
 
   it('Uploading form accept when everything is correct', async () => {
+    mockingoose(WlForm).toReturn({});
+
     await request(app)
       .post('/applications/wl')
       .set('Content-Type', 'application/json')
@@ -41,6 +45,6 @@ describe('Whitelist form endpoint', () => {
         dc: 'MoneyIgos#2000',
         hex: chance.string({ length: 15 })
       })
-      .expect(200);
+      .expect(201);
   });
 });

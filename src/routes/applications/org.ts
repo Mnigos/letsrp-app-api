@@ -61,7 +61,7 @@ router.post('/org', function (req: Request, res: Response) {
     !validationLength ||
     !validationRegexp
   ) {
-    res.status(406).send({
+    return res.status(406).send({
       error: 'Validation failed',
       status: res.statusCode
     });

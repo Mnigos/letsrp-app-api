@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import User from './model/user';
 import { requireObjectKeysType } from './validation';
 
@@ -16,19 +17,24 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
 
     const foundedUser = await User.findOne({ name });
 
+    const hash = bcrypt.compareSync(pass, foundedUser.pass);
+
     if (foundedUser === null) {
       return res.status(400).send({
         e: 'userNotFound'
       });
     }
 
-    if (foundedUser.pass !== pass) {
+    if (hash) {
       return res.status(401).send({
         e: 'passwordIncorrect'
       });
     }
 
-    const token = jwt.sign({ user: foundedUser.name }, 'privateKey');
+    const token = jwt.sign(
+      { user: foundedUser.name, perms: foundedUser.perms },
+      'privateKey'
+    );
 
     res.send({ token });
   } catch {

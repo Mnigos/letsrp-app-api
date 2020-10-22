@@ -87,3 +87,14 @@ Content-Type: application/json
   "id": "5f886f6391884d1de0f8afe6",
   "status": "accepted"
 }
+###
+POST /admin/managment HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiSmFjayIsInBlcm1zIjoiYWRtaW4iLCJpYXQiOjE2MDMzNTU3NzJ9.uqe9IzwrjN7PupLRdONRGg1lQOo8sZJ2HF-5ccSq0Vg",
+  "name": "John",
+  "pass": "*A@HJIjhdiwa",
+  "perms": "admin"
+}

@@ -1,5 +1,6 @@
 import mockingoose from 'mockingoose';
 import request from 'supertest';
+import bcrypt from 'bcrypt';
 import app from '../src/app';
 import User from '../src/model/user';
 
@@ -20,10 +21,13 @@ describe('Login system', () => {
   });
 
   it('login fails when user password is incorrect', async () => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync('zaq1@WSX', salt);
+
     mockingoose(User).toReturn(
       {
         name: 'John',
-        pass: 'fly',
+        pass: hash,
         perms: 'admin'
       },
       'findOne'
@@ -41,10 +45,13 @@ describe('Login system', () => {
   });
 
   it('login is succesfull when correct data is provided', async () => {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync('fly', salt);
+
     mockingoose(User).toReturn(
       {
         name: 'John',
-        pass: 'zaq1@WSX',
+        pass: hash,
         perms: 'admin'
       },
       'findOne'

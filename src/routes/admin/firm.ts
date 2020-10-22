@@ -34,7 +34,10 @@ router.post('/firm/check', (req: Request, res: Response) => {
     });
   }
 
-  FirmForm.findByIdAndUpdate({ _id: req.body?.id }, { status: req.body?.status })
+  FirmForm.findByIdAndUpdate(
+    { _id: req.body?.id },
+    { status: req.body?.status }
+  )
     .then(() => {
       res.status(201).send({
         message: 'Created'

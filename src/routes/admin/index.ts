@@ -6,6 +6,7 @@ import OrgRoute from './org';
 import EMSRoute from './ems';
 import LSPDRoute from './lspd';
 import LSCMRoute from './lscm';
+import ManagmentRoute from './management';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/', OrgRoute);
 router.use('/', EMSRoute);
 router.use('/', LSPDRoute);
 router.use('/', LSCMRoute);
+router.use('/', ManagmentRoute);
 
 export default router;

@@ -5,6 +5,10 @@ import app from '../../src/app';
 import OrgForm from '../../src/model/orgForm';
 
 describe('Login system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/org').expect(401);
   });

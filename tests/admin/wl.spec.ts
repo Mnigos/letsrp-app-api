@@ -5,6 +5,10 @@ import app from '../../src/app';
 import WlForm from '../../src/model/wlForm';
 
 describe('Login system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/wl').expect(401);
   });
@@ -26,6 +30,10 @@ describe('Login system', () => {
 });
 
 describe('Checking forms system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/wl/check').expect(401);
   });

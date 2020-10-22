@@ -7,6 +7,10 @@ import WlForm from '../../src/model/wlForm';
 const chance = Chance();
 
 describe('Whitelist form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/wl').expect(406);
     await request(app)

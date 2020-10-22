@@ -7,6 +7,10 @@ import EmsForm from '../../src/model/emsForm';
 const chance = Chance();
 
 describe('EMS form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/ems').expect(406);
     await request(app)

@@ -7,6 +7,10 @@ import FirmForm from '../../src/model/firmForm';
 const chance = Chance();
 
 describe('Firm form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/firm').expect(406);
     await request(app)

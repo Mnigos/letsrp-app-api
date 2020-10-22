@@ -5,6 +5,10 @@ import app from '../../src/app';
 import EmsForm from '../../src/model/emsForm';
 
 describe('Login system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/ems').expect(401);
   });
@@ -26,6 +30,10 @@ describe('Login system', () => {
 });
 
 describe('Checking forms system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/ems/check').expect(401);
   });

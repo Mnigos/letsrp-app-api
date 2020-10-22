@@ -7,6 +7,10 @@ import LspdForm from '../../src/model/lspdForm';
 const chance = Chance();
 
 describe('LSPD form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/lspd').expect(406);
     await request(app)

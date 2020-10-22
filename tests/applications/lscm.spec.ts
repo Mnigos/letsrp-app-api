@@ -7,6 +7,10 @@ import LscmForm from '../../src/model/lscmForm';
 const chance = Chance();
 
 describe('LSCM form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/lscm').expect(406);
     await request(app)

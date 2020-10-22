@@ -7,6 +7,10 @@ import SupForm from '../../src/model/supForm';
 const chance = Chance();
 
 describe('Support form endpoint', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Uploading form fails when something is not correct', async () => {
     await request(app).post('/applications/sup').expect(406);
     await request(app)

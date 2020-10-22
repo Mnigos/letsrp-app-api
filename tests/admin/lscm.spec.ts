@@ -5,6 +5,10 @@ import app from '../../src/app';
 import LscmForm from '../../src/model/lscmForm';
 
 describe('Login system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/lscm').expect(401);
   });
@@ -26,6 +30,10 @@ describe('Login system', () => {
 });
 
 describe('Checking forms system', () => {
+  beforeEach(() => {
+    mockingoose.resetAll();
+  });
+
   it('Authorization failed when token is invalid', async () => {
     await request(app).post('/admin/lscm/check').expect(401);
   });

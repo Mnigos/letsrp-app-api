@@ -24,3 +24,29 @@ describe('Login system', () => {
       .expect(200);
   });
 });
+
+describe('Checking forms system', () => {
+  it('Authorization failed when token is invalid', async () => {
+    await request(app).post('/admin/wl/check').expect(401);
+  });
+
+  it('Changing status of form when token is valid', async () => {
+    const user = 'John';
+    const token = jwt.sign({ user }, 'privateKey');
+
+    mockingoose(WlForm).toReturn({
+      id: '382179398127398',
+      status: 'waiting'
+    });
+
+    await request(app)
+      .post('/admin/wl')
+      .set('Content-Type', 'application/json')
+      .send({
+        token,
+        id: '382179398127398',
+        status: 'accepted'
+      })
+      .expect(200);
+  });
+});

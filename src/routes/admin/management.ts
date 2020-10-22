@@ -5,7 +5,7 @@ import User from '../../model/user';
 
 const router = Router();
 
-router.post('/managment', (req: Request, res: Response) => {
+router.post('/management', (req: Request, res: Response) => {
   const { token, name, pass, perms } = req.body;
 
   try {
@@ -13,6 +13,12 @@ router.post('/managment', (req: Request, res: Response) => {
   } catch {
     return res.status(401).send({
       error: 'Invalid token'
+    });
+  }
+
+  if (!name || !pass || !perms) {
+    return res.status(400).send({
+      error: 'Bad request'
     });
   }
 

@@ -25,9 +25,9 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
       });
     }
 
-    if (hash) {
+    if (!hash) {
       return res.status(401).send({
-        e: 'passwordIncorrect'
+        e: 'password Incorrect'
       });
     }
 

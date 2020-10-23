@@ -15,7 +15,7 @@ describe('Management user system', () => {
 
   it('Creating user without name when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(User).toReturn({});
 
@@ -32,7 +32,7 @@ describe('Management user system', () => {
 
   it('Creating user when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(User).toReturn({});
 

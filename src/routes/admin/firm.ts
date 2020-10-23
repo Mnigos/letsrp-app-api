@@ -16,22 +16,23 @@ router.post('/firm', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'firm') {
+    FirmForm.find({ formType: 'firm' }, (e, form) => {
+      if (e) {
+        res.status(500).send({
+          error: 'Cannot get this from database'
+        });
+      } else {
+        res.status(200).send({
+          form
+        });
+      }
+    });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  FirmForm.find({ formType: 'firm' }, (e, form) => {
-    if (e) {
-      res.status(500).send({
-        error: 'Cannot get this from database'
-      });
-    } else {
-      res.status(200).send({
-        form
-      });
-    }
-  });
+  }
 });
 
 router.post('/firm/check', (req: Request, res: Response) => {
@@ -46,22 +47,23 @@ router.post('/firm/check', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'firm') {
+    FirmForm.findByIdAndUpdate({ _id: id }, { status })
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  FirmForm.findByIdAndUpdate({ _id: id }, { status })
-    .then(() => {
-      res.status(201).send({
-        message: 'Created'
-      });
-    })
-    .catch(() => {
-      res.status(500).send({
-        error: 'Cannot save to database'
-      });
-    });
+  }
 });
 
 export default router;

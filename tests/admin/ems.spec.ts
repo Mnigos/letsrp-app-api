@@ -15,7 +15,7 @@ describe('Login system', () => {
 
   it('Gets array of forms when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(EmsForm).toReturn({});
 
@@ -40,7 +40,7 @@ describe('Checking forms system', () => {
 
   it('Changing status of form when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(EmsForm).toReturn({
       id: '382179398127398',

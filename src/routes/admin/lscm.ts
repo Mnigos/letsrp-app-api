@@ -16,22 +16,23 @@ router.post('/lscm', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'lscm') {
+    LscmForm.find({ formType: 'lscm' }, (e, form) => {
+      if (e) {
+        res.status(500).send({
+          error: 'Cannot get this from database'
+        });
+      } else {
+        res.status(200).send({
+          form
+        });
+      }
+    });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  LscmForm.find({ formType: 'lscm' }, (e, form) => {
-    if (e) {
-      res.status(500).send({
-        error: 'Cannot get this from database'
-      });
-    } else {
-      res.status(200).send({
-        form
-      });
-    }
-  });
+  }
 });
 
 router.post('/lscm/check', (req: Request, res: Response) => {
@@ -46,22 +47,23 @@ router.post('/lscm/check', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'lscm') {
+    LscmForm.findByIdAndUpdate({ _id: id }, { status })
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  LscmForm.findByIdAndUpdate({ _id: id }, { status })
-    .then(() => {
-      res.status(201).send({
-        message: 'Created'
-      });
-    })
-    .catch(() => {
-      res.status(500).send({
-        error: 'Cannot save to database'
-      });
-    });
+  }
 });
 
 export default router;

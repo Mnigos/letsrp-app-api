@@ -15,7 +15,7 @@ describe('Login system', () => {
 
   it('Gets array of forms when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(WlForm).toReturn({});
 
@@ -40,7 +40,7 @@ describe('Checking forms system', () => {
 
   it('Changing status of form when token is valid', async () => {
     const user = 'John';
-    const token = jwt.sign({ user }, 'privateKey');
+    const token = jwt.sign({ user, perms: 'admin' }, 'privateKey');
 
     mockingoose(WlForm).toReturn({
       id: '382179398127398',
@@ -48,13 +48,13 @@ describe('Checking forms system', () => {
     });
 
     await request(app)
-      .post('/admin/wl')
+      .post('/admin/wl/check')
       .set('Content-Type', 'application/json')
       .send({
         token,
         id: '382179398127398',
         status: 'accepted'
       })
-      .expect(200);
+      .expect(201);
   });
 });

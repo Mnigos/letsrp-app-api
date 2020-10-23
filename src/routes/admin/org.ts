@@ -16,26 +16,27 @@ router.post('/org', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'org') {
+    OrgForm.find({ formType: 'org' }, (e, form) => {
+      if (e) {
+        res.status(500).send({
+          error: 'Cannot get this from database'
+        });
+      } else {
+        res.status(200).send({
+          form
+        });
+      }
+    });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  OrgForm.find({ formType: 'org' }, (e, form) => {
-    if (e) {
-      res.status(500).send({
-        error: 'Cannot get this from database'
-      });
-    } else {
-      res.status(200).send({
-        form
-      });
-    }
-  });
+  }
 });
 
 router.post('/org/check', (req: Request, res: Response) => {
-  const { token } = req.body;
+  const { token, id, status } = req.body;
   let decoded: any;
 
   try {
@@ -46,22 +47,23 @@ router.post('/org/check', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'org') {
+    OrgForm.findByIdAndUpdate({ _id: id }, { status })
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  OrgForm.findByIdAndUpdate({ _id: req.body?.id }, { status: req.body?.status })
-    .then(() => {
-      res.status(201).send({
-        message: 'Created'
-      });
-    })
-    .catch(() => {
-      res.status(500).send({
-        error: 'Cannot save to database'
-      });
-    });
+  }
 });
 
 export default router;

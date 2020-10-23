@@ -15,21 +15,22 @@ router.post('/wl', (req: Request, res: Response) => {
       error: 'Invalid token'
     });
   }
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'wl') {
+    WlForm.find({ formType: 'wl' }, (e, form) => {
+      if (e) {
+        return res.status(500).send({
+          error: 'Cannot get this from database'
+        });
+      }
+      res.status(200).send({
+        form
+      });
+    });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  WlForm.find({ formType: 'wl' }, (e, form) => {
-    if (e) {
-      return res.status(500).send({
-        error: 'Cannot get this from database'
-      });
-    }
-    res.status(200).send({
-      form
-    });
-  });
+  }
 });
 
 router.post('/wl/check', (req: Request, res: Response) => {
@@ -44,22 +45,23 @@ router.post('/wl/check', (req: Request, res: Response) => {
     });
   }
 
-  if (decoded.perms !== 'admin')
+  if (decoded.perms === 'admin' || decoded.perms === 'wl') {
+    WlForm.findByIdAndUpdate({ _id: id }, { status })
+      .then(() => {
+        res.status(201).send({
+          message: 'Created'
+        });
+      })
+      .catch(() => {
+        res.status(500).send({
+          error: 'Cannot save to database'
+        });
+      });
+  } else {
     return res.status(401).send({
       error: 'Unauthorized'
     });
-
-  WlForm.findByIdAndUpdate({ _id: id }, { status })
-    .then(() => {
-      res.status(201).send({
-        message: 'Created'
-      });
-    })
-    .catch(() => {
-      res.status(500).send({
-        error: 'Cannot save to database'
-      });
-    });
+  }
 });
 
 export default router;

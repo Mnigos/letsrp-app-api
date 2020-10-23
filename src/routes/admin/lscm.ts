@@ -5,13 +5,22 @@ import LscmForm from '../../model/lscmForm';
 const router = Router();
 
 router.post('/lscm', (req: Request, res: Response) => {
+  const { token } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
+
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
+
   LscmForm.find({ formType: 'lscm' }, (e, form) => {
     if (e) {
       res.status(500).send({
@@ -26,18 +35,23 @@ router.post('/lscm', (req: Request, res: Response) => {
 });
 
 router.post('/lscm/check', (req: Request, res: Response) => {
+  const { token, id, status } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
 
-  LscmForm.findByIdAndUpdate(
-    { _id: req.body?.id },
-    { status: req.body?.status }
-  )
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
+
+  LscmForm.findByIdAndUpdate({ _id: id }, { status })
     .then(() => {
       res.status(201).send({
         message: 'Created'

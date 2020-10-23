@@ -5,13 +5,21 @@ import EmsForm from '../../model/emsForm';
 const router = Router();
 
 router.post('/ems', (req: Request, res: Response) => {
+  const { token } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
+
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
 
   EmsForm.find({ formType: 'ems' }, (e, form) => {
     if (e) {
@@ -27,15 +35,23 @@ router.post('/ems', (req: Request, res: Response) => {
 });
 
 router.post('/ems/check', (req: Request, res: Response) => {
+  const { token, id, status } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
 
-  EmsForm.findByIdAndUpdate({ _id: req.body?.id }, { status: req.body?.status })
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
+
+  EmsForm.findByIdAndUpdate({ _id: id }, { status })
     .then(() => {
       res.status(201).send({
         message: 'Created'

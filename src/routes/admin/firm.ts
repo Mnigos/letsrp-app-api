@@ -5,13 +5,22 @@ import FirmForm from '../../model/firmForm';
 const router = Router();
 
 router.post('/firm', (req: Request, res: Response) => {
+  const { token } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
+
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
+
   FirmForm.find({ formType: 'firm' }, (e, form) => {
     if (e) {
       res.status(500).send({
@@ -26,18 +35,23 @@ router.post('/firm', (req: Request, res: Response) => {
 });
 
 router.post('/firm/check', (req: Request, res: Response) => {
+  const { token, id, status } = req.body;
+  let decoded: any;
+
   try {
-    jwt.verify(req.body?.token, 'privateKey');
+    decoded = jwt.verify(token, 'privateKey');
   } catch (e) {
     return res.status(401).send({
       error: 'Invalid token'
     });
   }
 
-  FirmForm.findByIdAndUpdate(
-    { _id: req.body?.id },
-    { status: req.body?.status }
-  )
+  if (decoded.perms !== 'admin')
+    return res.status(401).send({
+      error: 'Unauthorized'
+    });
+
+  FirmForm.findByIdAndUpdate({ _id: id }, { status })
     .then(() => {
       res.status(201).send({
         message: 'Created'

@@ -2,23 +2,23 @@ import mongoose from 'mongoose';
 import assert from 'assert';
 import app from './app';
 
-const { mongoURI } = require('./config/keysDev');
+require('dotenv').config();
 
 const port = 8080;
 
-['MongoURI'].forEach(variable => {
-  assert([variable], `${variable} is undefined!`);
+['MONGO_URI'].forEach(variable => {
+  assert(process.env[variable], `proces.env${variable} is undefined!`);
 });
 mongoose.set('useFindAndModify', false);
 
 mongoose
-  .connect(mongoURI, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
   .then(() => {
     console.log('Mongoose is connected');
-    app.listen(port, () => {
+    app.listen(process.env.PORT || 8080, () => {
       console.log(`Listening on ${port}`);
     });
   });

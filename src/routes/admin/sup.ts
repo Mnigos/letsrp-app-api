@@ -48,7 +48,13 @@ router.post('/sup/check', (req: Request, res: Response) => {
   }
 
   if (decoded.perms === 'admin' || decoded.perms === 'sup') {
-    SupForm.findByIdAndUpdate({ _id: id }, { status })
+    SupForm.findByIdAndUpdate(
+      { _id: id },
+      {
+        status,
+        reason: req.body?.reason
+      }
+    )
       .then(() => {
         res.status(201).send({
           message: 'Created'

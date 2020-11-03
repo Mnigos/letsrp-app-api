@@ -48,7 +48,13 @@ router.post('/org/check', (req: Request, res: Response) => {
   }
 
   if (decoded.perms === 'admin' || decoded.perms === 'org') {
-    OrgForm.findByIdAndUpdate({ _id: id }, { status })
+    OrgForm.findByIdAndUpdate(
+      { _id: id },
+      {
+        status,
+        reason: req.body?.reason
+      }
+    )
       .then(() => {
         res.status(201).send({
           message: 'Created'

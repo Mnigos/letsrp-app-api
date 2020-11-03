@@ -48,7 +48,13 @@ router.post('/ems/check', (req: Request, res: Response) => {
   }
 
   if (decoded.perms === 'admin' || decoded.perms === 'ems') {
-    EmsForm.findByIdAndUpdate({ _id: id }, { status })
+    EmsForm.findByIdAndUpdate(
+      { _id: id },
+      {
+        status,
+        reason: req.body?.reason
+      }
+    )
       .then(() => {
         res.status(201).send({
           message: 'Created'

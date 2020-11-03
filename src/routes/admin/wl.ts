@@ -46,7 +46,13 @@ router.post('/wl/check', (req: Request, res: Response) => {
   }
 
   if (decoded.perms === 'admin' || decoded.perms === 'wl') {
-    WlForm.findByIdAndUpdate({ _id: id }, { status })
+    WlForm.findByIdAndUpdate(
+      { _id: id },
+      {
+        status,
+        reason: req.body?.reason
+      }
+    )
       .then(() => {
         res.status(201).send({
           message: 'Created'

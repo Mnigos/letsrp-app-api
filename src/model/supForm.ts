@@ -11,6 +11,7 @@ export interface ISup extends Document {
   hex: string;
   formType: string;
   status: string;
+  reason: string;
 }
 
 const SupSchema = new Schema({
@@ -23,7 +24,8 @@ const SupSchema = new Schema({
   dc: String,
   hex: String,
   formType: String,
-  status: String
+  status: String,
+  reason: String
 });
 
 const SupForm = model<ISup>('SupForm', SupSchema);

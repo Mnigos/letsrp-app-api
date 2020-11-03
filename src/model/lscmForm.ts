@@ -14,6 +14,7 @@ export interface ILscm extends Document {
   hex: string;
   formType: string;
   status: string;
+  reason: string;
 }
 
 const LscmSchema = new Schema({
@@ -29,7 +30,8 @@ const LscmSchema = new Schema({
   dc: String,
   hex: String,
   formType: String,
-  status: String
+  status: String,
+  reason: String
 });
 
 const LscmForm = model<ILscm>('LscmForm', LscmSchema);

@@ -14,6 +14,7 @@ export interface IOrg extends Document {
   hex: string;
   formType: string;
   status: string;
+  reason: string;
 }
 
 const OrgSchema = new Schema({
@@ -28,7 +29,8 @@ const OrgSchema = new Schema({
   dc: String,
   hex: String,
   formType: String,
-  status: String
+  status: String,
+  reason: String
 });
 
 const OrgForm = model<IOrg>('OrgForm', OrgSchema);

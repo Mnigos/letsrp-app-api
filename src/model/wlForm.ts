@@ -13,6 +13,7 @@ export interface IWl extends Document {
   hex: string;
   formType: string;
   status: string;
+  reason: string;
 }
 
 const WlSchema = new Schema({
@@ -27,7 +28,8 @@ const WlSchema = new Schema({
   dc: String,
   hex: String,
   formType: String,
-  status: String
+  status: String,
+  reason: String
 });
 
 const WlForm = model<IWl>('WlForm', WlSchema);

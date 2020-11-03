@@ -13,6 +13,7 @@ export interface IFirm extends Document {
   hex: string;
   formType: string;
   status: string;
+  reason: string;
 }
 
 const FirmSchema = new Schema({
@@ -26,7 +27,8 @@ const FirmSchema = new Schema({
   dc: String,
   hex: String,
   formType: String,
-  status: String
+  status: String,
+  reason: String
 });
 
 const FirmForm = model<IFirm>('FirmForm', FirmSchema);

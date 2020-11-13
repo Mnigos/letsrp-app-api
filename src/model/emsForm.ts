@@ -15,6 +15,7 @@ export interface IEms extends Document {
   formType: string;
   status: string;
   reason: string;
+  submissionDate: Date;
 }
 
 const EmsSchema = new Schema({
@@ -31,7 +32,8 @@ const EmsSchema = new Schema({
   hex: String,
   formType: String,
   status: String,
-  reason: String
+  reason: String,
+  submissionDate: Date
 });
 
 const EmsForm = model<IEms>('EmsForm', EmsSchema);

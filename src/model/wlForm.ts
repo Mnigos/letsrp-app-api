@@ -14,6 +14,7 @@ export interface IWl extends Document {
   formType: string;
   status: string;
   reason: string;
+  submissionDate: Date;
 }
 
 const WlSchema = new Schema({
@@ -29,7 +30,8 @@ const WlSchema = new Schema({
   hex: String,
   formType: String,
   status: String,
-  reason: String
+  reason: String,
+  submissionDate: Date
 });
 
 const WlForm = model<IWl>('WlForm', WlSchema);

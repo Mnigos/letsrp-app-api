@@ -15,6 +15,7 @@ export interface ILspd extends Document {
   formType: string;
   status: string;
   reason: string;
+  submissionDate: Date;
 }
 
 const LspdSchema = new Schema({
@@ -31,7 +32,8 @@ const LspdSchema = new Schema({
   hex: String,
   formType: String,
   status: String,
-  reason: String
+  reason: String,
+  submissionDate: Date
 });
 
 const LspdForm = model<ILspd>('LspdForm', LspdSchema);

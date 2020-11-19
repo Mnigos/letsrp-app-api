@@ -45,7 +45,8 @@ describe('Org form endpoint', () => {
         headquarters: chance.word({ length: 20 }),
         members: chance.natural({ min: 0, max: 100 }),
         dc: 'MoneyIgos#2000',
-        hex: chance.string({ length: 15 })
+        hex: chance.string({ length: 15 }),
+        submissionDate: 'Thu Nov 19 2019 13:16:42'
       })
       .expect(201);
   });

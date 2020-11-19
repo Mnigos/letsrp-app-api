@@ -47,7 +47,8 @@ describe('Whitelist form endpoint', () => {
         know: chance.word({ length: 10 }),
         experience: chance.word({ length: 10 }),
         dc: 'MoneyIgos#2000',
-        hex: chance.string({ length: 15 })
+        hex: chance.string({ length: 15 }),
+        submissionDate: 'Thu Nov 19 2019 13:16:42'
       })
       .expect(201);
   });

@@ -43,7 +43,8 @@ describe('Support form endpoint', () => {
         hoursPerDay: chance.natural({ min: 0, max: 24 }),
         old: chance.age(),
         dc: 'MoneyIgos#2000',
-        hex: chance.string({ length: 15 })
+        hex: chance.string({ length: 15 }),
+        submissionDate: 'Thu Nov 19 2019 13:16:42'
       })
       .expect(201);
   });

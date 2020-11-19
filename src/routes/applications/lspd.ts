@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.post('/lspd', function (req: Request, res: Response) {
+router.post('/lspd', async (req: Request, res: Response) => {
   const {
     name,
     date,
@@ -20,7 +20,8 @@ router.post('/lspd', function (req: Request, res: Response) {
     old,
     experience,
     dc,
-    hex
+    hex,
+    submissionDate
   } = req.body;
 
   const validationLength: boolean = requireObjectLength(
@@ -60,6 +61,27 @@ router.post('/lspd', function (req: Request, res: Response) {
       status: res.statusCode
     });
   }
+
+  const seconds = (s: number) => 1000 * s;
+  const minutes = (m: number) => seconds(60) * m;
+  const hours = (h: number) => minutes(60) * h;
+  const days = (d: number) => hours(24) * d;
+
+  if (!submissionDate) return res.status(406).send({ error: 'e' });
+
+  const form = await LspdForm.findOne({ dc });
+
+  const subDate = new Date(submissionDate);
+
+  if (form) {
+    if (new Date(form.submissionDate.getTime() + days(7)) > subDate) {
+      return res.status(406).send({
+        error: 'Too frequent submission of applications',
+        status: res.statusCode
+      });
+    }
+  }
+
   new LspdForm({
     name,
     date,
@@ -73,6 +95,7 @@ router.post('/lspd', function (req: Request, res: Response) {
     dc,
     hex,
     formType: 'lspd',
+    submissionDate: subDate,
     status: 'awaiting'
   })
     .save()

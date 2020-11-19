@@ -4,8 +4,6 @@ import app from './app';
 
 require('dotenv').config();
 
-const port = 8080;
-
 ['MONGO_URI'].forEach(variable => {
   assert(process.env[variable], `proces.env${variable} is undefined!`);
 });
@@ -18,7 +16,7 @@ mongoose
   })
   .then(() => {
     console.log('Mongoose is connected');
-    app.listen(process.env.PORT || 8080, () => {
-      console.log(`Listening on ${port}`);
+    app.listen(process.env.PORT || 8081, () => {
+      console.log(`Listening on ${process.env.PORT}`);
     });
   });

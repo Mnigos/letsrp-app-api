@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.post('/wl', (req: Request, res: Response) => {
+router.post('/wl', async (req: Request, res: Response) => {
   const {
     name,
     date,
@@ -19,7 +19,8 @@ router.post('/wl', (req: Request, res: Response) => {
     know,
     experience,
     dc,
-    hex
+    hex,
+    submissionDate
   } = req.body;
 
   const validationLength: boolean = requireObjectLength(
@@ -68,6 +69,27 @@ router.post('/wl', (req: Request, res: Response) => {
       error: 'Validation failed'
     });
   }
+
+  const seconds = (s: number) => 1000 * s;
+  const minutes = (m: number) => seconds(60) * m;
+  const hours = (h: number) => minutes(60) * h;
+  const days = (d: number) => hours(24) * d;
+
+  if (!submissionDate) return res.status(406).send({ error: 'e' });
+
+  const form = await WlForm.findOne({ dc });
+
+  const subDate = new Date(submissionDate);
+
+  if (form) {
+    if (new Date(form.submissionDate.getTime() + days(7)) > subDate) {
+      return res.status(406).send({
+        error: 'Too frequent submission of applications',
+        status: res.statusCode
+      });
+    }
+  }
+
   new WlForm({
     name,
     date,
@@ -80,6 +102,7 @@ router.post('/wl', (req: Request, res: Response) => {
     dc,
     hex,
     formType: 'wl',
+    submissionDate: subDate,
     status: 'awaiting'
   })
     .save()

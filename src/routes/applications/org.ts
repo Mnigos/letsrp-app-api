@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.post('/org', function (req: Request, res: Response) {
+router.post('/org', async (req: Request, res: Response) => {
   const {
     name,
     idea,
@@ -20,7 +20,8 @@ router.post('/org', function (req: Request, res: Response) {
     headquarters,
     members,
     dc,
-    hex
+    hex,
+    submissionDate
   } = req.body;
 
   const validationLength = requireObjectLength(
@@ -66,6 +67,27 @@ router.post('/org', function (req: Request, res: Response) {
       status: res.statusCode
     });
   }
+
+  const seconds = (s: number) => 1000 * s;
+  const minutes = (m: number) => seconds(60) * m;
+  const hours = (h: number) => minutes(60) * h;
+  const days = (d: number) => hours(24) * d;
+
+  if (!submissionDate) return res.status(406).send({ error: 'e' });
+
+  const form = await OrgForm.findOne({ dc });
+
+  const subDate = new Date(submissionDate);
+
+  if (form) {
+    if (new Date(form.submissionDate.getTime() + days(7)) > subDate) {
+      return res.status(406).send({
+        error: 'Too frequent submission of applications',
+        status: res.statusCode
+      });
+    }
+  }
+
   new OrgForm({
     name,
     idea,
@@ -79,6 +101,7 @@ router.post('/org', function (req: Request, res: Response) {
     dc,
     hex,
     formType: 'org',
+    submissionDate: subDate,
     status: 'awaiting'
   })
     .save()

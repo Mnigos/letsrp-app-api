@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.post('/sup', function (req: Request, res: Response) {
+router.post('/sup', async function (req: Request, res: Response) {
   const {
     name,
     about,
@@ -17,7 +17,8 @@ router.post('/sup', function (req: Request, res: Response) {
     old,
     experienceSup,
     dc,
-    hex
+    hex,
+    submissionDate
   } = req.body;
 
   const validationLength = requireObjectLength(
@@ -54,6 +55,27 @@ router.post('/sup', function (req: Request, res: Response) {
       status: res.statusCode
     });
   }
+
+  const seconds = (s: number) => 1000 * s;
+  const minutes = (m: number) => seconds(60) * m;
+  const hours = (h: number) => minutes(60) * h;
+  const days = (d: number) => hours(24) * d;
+
+  if (!submissionDate) return res.status(406).send({ error: 'e' });
+
+  const form = await SupForm.findOne({ dc });
+
+  const subDate = new Date(submissionDate);
+
+  if (form) {
+    if (new Date(form.submissionDate.getTime() + days(7)) > subDate) {
+      return res.status(406).send({
+        error: 'Too frequent submission of applications',
+        status: res.statusCode
+      });
+    }
+  }
+
   new SupForm({
     name,
     about,
@@ -64,6 +86,7 @@ router.post('/sup', function (req: Request, res: Response) {
     dc,
     hex,
     formType: 'sup',
+    submissionDate: subDate,
     status: 'awaiting'
   })
     .save()

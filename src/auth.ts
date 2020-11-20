@@ -19,7 +19,7 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
 
     const hash = bcrypt.compareSync(pass, foundedUser.pass);
 
-    if (foundedUser === null) {
+    if (!foundedUser) {
       return res.status(400).send({
         e: 'userNotFound'
       });
@@ -37,8 +37,10 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
     );
 
     res.send({ token });
-  } catch {
-    res.sendStatus(500);
+  } catch (e) {
+    res.status(500).send({
+      e
+    });
   }
 });
 

@@ -21,13 +21,10 @@ describe('Login system', () => {
   });
 
   it('login fails when user password is incorrect', async () => {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync('zaq1@WSX', salt);
-
     mockingoose(User).toReturn(
       {
         name: 'John',
-        pass: hash,
+        pass: 'abc',
         perms: 'admin'
       },
       'findOne'
@@ -45,8 +42,7 @@ describe('Login system', () => {
   });
 
   it('login is succesfull when correct data is provided', async () => {
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync('fly', salt);
+    const hash = bcrypt.hashSync('fly', 10);
 
     mockingoose(User).toReturn(
       {
@@ -62,7 +58,7 @@ describe('Login system', () => {
       .set('Content-Type', 'application/json')
       .send({
         name: 'John',
-        pass: 'zaq1@WSX'
+        pass: 'fly'
       })
       .expect(200);
 

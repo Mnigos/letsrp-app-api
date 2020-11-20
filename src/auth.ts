@@ -17,19 +17,15 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
 
     const foundedUser = await User.findOne({ name });
 
-    const hash = bcrypt.compareSync(pass, foundedUser.pass);
+    if (!foundedUser) return res.status(400).send({ e: 'userNotFound' });
 
-    if (!foundedUser) {
-      return res.status(400).send({
-        e: 'userNotFound'
-      });
-    }
+    const isPasswordCorrect = bcrypt.compareSync(pass, foundedUser.pass);
+    console.log(isPasswordCorrect);
+    console.log(pass);
+    console.log(foundedUser.pass);
 
-    if (hash) {
-      return res.status(401).send({
-        e: 'password Incorrect'
-      });
-    }
+    if (!isPasswordCorrect)
+      return res.status(401).send({ e: 'password Incorrect' });
 
     const token = jwt.sign(
       { user: foundedUser.name, perms: foundedUser.perms },
@@ -38,9 +34,7 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
 
     res.send({ token });
   } catch (e) {
-    res.status(500).send({
-      e
-    });
+    res.status(500).send({ e });
   }
 });
 

@@ -27,8 +27,7 @@ router.post('/management', (req: Request, res: Response) => {
       error: 'Bad request'
     });
 
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(pass, salt);
+  const hash = bcrypt.hashSync(pass, 10);
 
   new User({
     name,

@@ -20,9 +20,6 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
     if (!foundedUser) return res.status(400).send({ e: 'userNotFound' });
 
     const isPasswordCorrect = bcrypt.compareSync(pass, foundedUser.pass);
-    console.log(isPasswordCorrect);
-    console.log(pass);
-    console.log(foundedUser.pass);
 
     if (!isPasswordCorrect)
       return res.status(401).send({ e: 'password Incorrect' });

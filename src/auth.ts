@@ -29,7 +29,7 @@ router.post('/auth/admin', async (req: Request, res: Response) => {
       'privateKey'
     );
 
-    res.send({ token });
+    res.send({ token, perms: foundedUser.perms });
   } catch (e) {
     res.status(500).send({ e });
   }

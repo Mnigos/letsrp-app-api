@@ -1,5 +1,5 @@
 {
-  "name": "express-app",
+  "name": "letsrp-app-api",
   "version": "1.0.0",
   "description": "Rest API for Let's RP Application",
   "main": "src/server.ts",
